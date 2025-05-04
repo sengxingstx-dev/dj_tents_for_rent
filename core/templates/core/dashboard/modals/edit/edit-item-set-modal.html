@@ -1,0 +1,101 @@
+<div id="editItemSetModal-{{ item_set.id }}"
+     tabindex="-1"
+     aria-hidden="true"
+     class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  {# Using max-w-md like the add modal. Change back to max-w-2xl if you preferred the wider edit modal #}
+  <div class="relative w-full max-w-md max-h-full">
+    <!-- Modal content -->
+    {# Action points to the specific item set's update view #}
+    <form method="post" action="{% url 'edit-item-set' item_set.id %}" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      {% csrf_token %}
+      <!-- Modal header -->
+      <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          Edit Item Set: {{ item_set.name }}
+        </h3>
+        <button type="button"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="editItemSetModal-{{ item_set.id }}">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="p-6 space-y-6">
+        {# Display Non-Field Errors if form is passed back on validation failure #}
+        {% if form.non_field_errors %}
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                {% for error in form.non_field_errors %}
+                    <span class="font-medium">Error!</span> {{ error }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {# Item Set Fields - Layout adjusted to match add modal #}
+        <div class="grid gap-4 mb-4 grid-cols-2">
+          <div class="col-span-2"> {# Name takes full width #}
+            {# Use form variable if available (for validation errors), otherwise use item_set data #}
+            <label for="edit_item_set_name_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set Name</label>
+            <input type="text"
+                   name="name"
+                   {# Use form value if present (e.g., after validation error), otherwise use item_set value #}
+                   value="{{ form.name.value|default:item_set.name }}"
+                   id="edit_item_set_name_{{ item_set.id }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                   placeholder="Enter set name" required> {# Added required based on add modal #}
+            {% if form.name.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.name.errors|striptags }}</p>
+            {% endif %}
+          </div>
+          <div class="col-span-2 sm:col-span-1"> {# Base Price #}
+            <label for="edit_item_set_base_price_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Base Price (€)</label>
+            <input type="number"
+                   step="0.01"
+                   name="base_price"
+                   value="{{ form.base_price.value|default:item_set.base_price }}"
+                   id="edit_item_set_base_price_{{ item_set.id }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                   placeholder="0.00" required> {# Added required based on add modal #}
+             {% if form.base_price.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.base_price.errors|striptags }}</p>
+            {% endif %}
+          </div>
+           <div class="col-span-2 sm:col-span-1"> {# Replacement Deposit #}
+            <label for="edit_item_set_replacement_deposit_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Replacement Deposit (€)</label>
+            <input type="number"
+                   step="0.01"
+                   name="replacement_deposit"
+                   value="{{ form.replacement_deposit.value|default:item_set.replacement_deposit }}"
+                   id="edit_item_set_replacement_deposit_{{ item_set.id }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                   placeholder="0.00" required> {# Added required based on add modal #}
+             {% if form.replacement_deposit.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.replacement_deposit.errors|striptags }}</p>
+            {% endif %}
+          </div>
+          <div class="col-span-2"> {# Description takes full width #}
+            <label for="edit_item_set_description_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+            <textarea name="description"
+                      id="edit_item_set_description_{{ item_set.id }}"
+                      rows="3" {# Changed rows to match add modal #}
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write item set description here">{{ form.description.value|default:item_set.description }}</textarea>
+             {% if form.description.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.description.errors|striptags }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Update Item Set
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,146 @@
+{% extends "core/clients/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+  Home
+{% endblock title %}
+{% block clientcontent %}
+  {% include "core/clients/partials/carousel.html" %}
+  <div class="container mx-auto py-8 px-4">
+    {# --- Display Item Sets --- #}
+    {% if item_sets %}
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Rental Sets</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+        {% for set_item in item_sets %}
+          <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
+            {# --- Image Section --- #}
+            <a href="#"> {# Link to set detail page if you create one #}
+              {% if set_item.image %}
+                <img class="rounded-t-lg object-cover h-48 w-full"
+                     src="{{ set_item.image.url }}"
+                     alt="{{ set_item.name }} image"
+                     width=""
+                     height="" />
+              {% else %}
+                <img class="rounded-t-lg object-cover h-48 w-full"
+                     src="{% static 'images/placeholder.png' %}"
+                     alt="Placeholder image"
+                     width=""
+                     height="" />
+              {% endif %}
+            </a>
+            {# --- Content Section --- #}
+            <div class="p-5 flex flex-col flex-grow">
+              {# --- Title --- #}
+              <a href="#">
+                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ set_item.name }}</h5>
+              </a>
+              {# --- Description --- #}
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 flex-grow">{{ set_item.description|truncatewords:15 }}</p>
+              {# --- Price --- #}
+              <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
+                LAK{{ set_item.base_price|floatformat:2|intcomma }} / day (Set Price)
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Available Sets: {{ set_item.available_quantity }}</p>
+              {# --- Add to Booking Button --- #}
+              <form action="{% url 'add_to_booking_selection' %}"
+                    method="post"
+                    class="mt-auto">
+                {% csrf_token %}
+                <input type="hidden" name="set_id" value="{{ set_item.pk }}">
+                {# Optional: Add quantity selector for sets if needed #}
+                <input type="hidden" name="quantity" value="1">
+                {% if set_item %}
+                  <button type="submit"
+                          class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Add Set to Booking
+                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                         aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 18 18">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                    </svg>
+                  </button>
+                {% else %}
+                  <button type="button"
+                          disabled
+                          class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-gray-500 bg-gray-300 rounded-lg cursor-not-allowed dark:bg-gray-600 dark:text-gray-400">
+                    Currently Unavailable
+                  </button>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {# --- Display Individual Items --- #}
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Individual Rental Items</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for item in rental_items %}
+        {# Filter moved to view, template assumes items passed are available #}
+        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
+          {# --- Image Section --- #}
+          <a href="#"> {# Link to item detail page if you create one #}
+            {% if item.image %}
+              <img class="rounded-t-lg object-cover h-48 w-full"
+                   src="{{ item.image.url }}"
+                   alt="{{ item.item_type }} image"
+                   width=""
+                   height="" />
+            {% else %}
+              <img class="rounded-t-lg object-cover h-48 w-full"
+                   src="{% static 'images/placeholder.png' %}"
+                   alt="Placeholder image"
+                   width=""
+                   height="" />
+            {% endif %}
+          </a>
+          {# --- Content Section --- #}
+          <div class="p-5 flex flex-col flex-grow">
+            {# --- Title --- #}
+            <a href="#">
+              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {{ item.item_type }} {# Uses RentalItemType's __str__ method #}
+              </h5>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Serial: {{ item.serial_number }}</p>
+            </a>
+            {# --- Description --- #}
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 flex-grow">
+              {{ item.item_type.description|truncatewords:15 }}
+            </p>
+            {# --- Price --- #}
+            <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
+              ${{ item.item_type.rental_price_per_day|floatformat:2|intcomma }} / day
+            </p>
+            {# --- Add to Booking Button --- #}
+            <form action="{% url 'add_to_booking_selection' %}"
+                  method="post"
+                  class="mt-auto">
+              {% csrf_token %}
+              <input type="hidden" name="item_id" value="{{ item.pk }}">
+              <input type="hidden" name="quantity" value="1">
+              {# Always add 1 specific item #}
+              <button type="submit"
+                      class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Add Item to Booking
+                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+                     aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 18 18">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 text-center py-10">
+          <p class="text-gray-500 dark:text-gray-300">No individual rental items available at the moment.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock clientcontent %}
