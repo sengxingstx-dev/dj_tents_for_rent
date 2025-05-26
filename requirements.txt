@@ -13,6 +13,7 @@ django-browser-reload==1.15.0
 django-tailwind==3.8.0
 djlint==1.35.2
 EditorConfig==0.12.4
+et_xmlfile==2.0.0
 html-tag-names==0.1.2
 html-void-elements==0.1.0
 idna==3.10
@@ -22,6 +23,7 @@ json5==0.9.25
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
+openpyxl==3.1.5
 pathspec==0.12.1
 pillow==11.2.1
 Pygments==2.18.0

@@ -1,7 +1,7 @@
 {# d:\dev\repos\sengxingstx-dev\projects\dj_tents_for_rent\core\templates\core\dashboard\pages\manage-item-sets.html #}
-
 {% extends "core/dashboard/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block title %}
   Admin | Item Sets
 {% endblock title %}
@@ -14,104 +14,134 @@
                   data-modal-target="addItemSetModal"
                   data-modal-toggle="addItemSetModal"
                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+            <svg class="me-1 -ms-1 w-5 h-5"
+                 fill="currentColor"
+                 viewBox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd">
+              </path>
             </svg>
-            Add Item Set
+            ເພີ່ມເຊັດ
           </button>
           {# Add item set modal #}
-          {% include "core/dashboard/modals/add/add-item-set-modal.html" %} {# Removed 'with form=add_form' as it's not passed from this view #}
+          {% include "core/dashboard/modals/add/add-item-set-modal.html" %}
+          {# Removed 'with form=add_form' as it's not passed from this view #}
         </div>
-        <form action="" method="get">
-          <label for="table-search" class="sr-only">Search</label>
-          <div class="pr-2 relative">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-              </svg>
-            </div>
-            <input type="text"
-                   id="table-search-sets"
-                   name="search"
-                   value="{{ request.GET.search|default:'' }}" {# Added default filter #}
-                   class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   placeholder="Search for item sets">
+        <div class="flex items-center space-x-4">
+          {# Container for search and export #}
+          {# Export Button #}
+          <a href="{% url 'export_item_sets_excel' %}"
+            id="export-excel-button" {# Added ID for JS #}
+            class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            ດາວໂຫຼດ Excel
+          </a>
+          <form action="" method="get">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="pr-2 relative">
+              <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                     aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+              </div>
+              <input type="text"
+                id="table-search-sets"
+                name="search"
+                value="{{ request.GET.search|default:'' }}" {# Added default filter #}
+                class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search for item sets">
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3">No.</th>
-            <th scope="col" class="px-6 py-3">Name</th>
-            <th scope="col" class="px-6 py-3">Description</th>
-            <th scope="col" class="px-6 py-3">Base Price</th>
-            <th scope="col" class="px-6 py-3">Deposit</th>
-            <th scope="col" class="px-6 py-3">Components</th>
-            <th scope="col" class="px-6 py-3">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if item_sets %}
-            {% for item_set in item_sets %}
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td class="px-6 py-4">{{ forloop.counter }}</td>
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ item_set.name }}</td>
-                <td class="px-6 py-4">
-                  {% if item_set.description %}
-                  {{ item_set.description|truncatewords:10 }}
-                  {% else %}
-                  N/A
-                  {% endif %}
-                </td>
-                <td class="px-6 py-4">LAK{{ item_set.base_price }}</td>
-                <td class="px-6 py-4">LAK{{ item_set.replacement_deposit }}</td>
-                <td class="px-6 py-4">
-                    <ul class="list-disc list-inside"> {# Added list styling #}
-                        {% for component in item_set.itemsetcomponent_set.all %}
-                            <li>{{ component.item_type.get_type_name_display }} x {{ component.quantity }}</li>
-                        {% empty %}
-                            <span class="text-xs italic text-gray-500 dark:text-gray-400">None</span> {# Adjusted styling #}
-                        {% endfor %}
-                    </ul>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap"> {# Added whitespace-nowrap #}
-                  <!-- Add Components Link -->
-                  <a href="{% url 'add_components' set_id=item_set.id %}"
-                     class="font-medium text-green-600 mr-2 dark:text-green-500 hover:underline">Details</a>
-                  <!-- Edit Link -->
-                  <a href="#"
-                     type="button"
-                     data-modal-target="editItemSetModal-{{ item_set.id }}"
-                     data-modal-show="editItemSetModal-{{ item_set.id }}"
-                     class="font-medium text-blue-600 mr-2 dark:text-blue-500 hover:underline">Edit</a>
-                  <!-- Delete Link -->
-                  <a href="#"
-                     type="button"
-                     data-modal-target="deleteItemSetModal-{{ item_set.id }}"
-                     data-modal-show="deleteItemSetModal-{{ item_set.id }}"
-                     class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</a>
-
-                  {# Edit item set modal #}
-                  {% include "core/dashboard/modals/edit/edit-item-set-modal.html" with item_set=item_set %}
-
-                  {# Delete item set modal #}
-                  <form id="delete-form-{{ item_set.id }}" action="{% url 'delete_item_set' item_set.id %}" method="post" class="hidden">
-                    {% csrf_token %}
-                  </form>
-                  {% include "core/dashboard/modals/delete/delete-item-set-modal.html" with item_set=item_set delete_confirm_msg=delete_confirm_msg %}
-                </td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            <tr class="bg-white text-center border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4" colspan="7">No item sets found.</td>
+        </div>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr class="lao-table-header">
+              <th scope="col" class="px-6 py-3">#</th>
+              <th scope="col" class="px-6 py-3">ຮູບພາບ</th>
+              <th scope="col" class="px-6 py-3">ຊື່ເຊັດ</th>
+              <th scope="col" class="px-6 py-3">ຄຳອະທິບາຍ</th>
+              <th scope="col" class="px-6 py-3">ລາຄາ</th>
+              <th scope="col" class="px-6 py-3">ມັດຈຳ</th>
+              <th scope="col" class="px-6 py-3">ລາຍການເຊັດ</th>
+              <th scope="col" class="px-6 py-3">ຈັດການ</th>
             </tr>
-          {% endif %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% if item_sets %}
+              {% for item_set in item_sets %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <td class="px-6 py-4">{{ forloop.counter }}</td>
+                  <th scope="row"
+                      class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                    <img class="w-10 h-10 rounded-full"
+                         src="{% if item_set.image %} {{ item_set.image.url }} {% else %} {% static 'accounts/assets/images/default.jpg' %} {% endif %}"
+                         width=""
+                         height=""
+                         alt="rental item image">
+                  </th>
+                  <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ item_set.name }}</td>
+                  <td class="px-6 py-4">
+                    {% if item_set.description %}
+                      {{ item_set.description|truncatewords:20 }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4">LAK{{ item_set.base_price|intcomma }}</td>
+                  <td class="px-6 py-4">LAK{{ item_set.replacement_deposit|intcomma }}</td>
+                  <td class="px-6 py-4">
+                    <ul class="list-disc list-inside">
+                      {# Added list styling #}
+                      {% for component in item_set.itemsetcomponent_set.all %}
+                        <li>{{ component.item_type.get_type_name_display }} x {{ component.quantity }}</li>
+                      {% empty %}
+                        <span class="text-xs italic text-gray-500 dark:text-gray-400">None</span> {# Adjusted styling #}
+                      {% endfor %}
+                    </ul>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {# Added whitespace-nowrap #}
+                    <!-- Add Components Link -->
+                    <a href="{% url 'add_components' set_id=item_set.id %}"
+                       class="font-medium text-green-600 mr-2 dark:text-green-500 hover:underline">ລາຍການ</a>
+                    <!-- Edit Link -->
+                    <a href="#"
+                       type="button"
+                       data-modal-target="editItemSetModal-{{ item_set.id }}"
+                       data-modal-show="editItemSetModal-{{ item_set.id }}"
+                       class="font-medium text-blue-600 mr-2 dark:text-blue-500 hover:underline">ແກ້ໄຂ</a>
+                    <!-- Delete Link -->
+                    <a href="#"
+                       type="button"
+                       data-modal-target="deleteItemSetModal-{{ item_set.id }}"
+                       data-modal-show="deleteItemSetModal-{{ item_set.id }}"
+                       class="font-medium text-red-600 dark:text-red-500 hover:underline">ລືບ</a>
+                    {# Edit item set modal #}
+                    {% include "core/dashboard/modals/edit/edit-item-set-modal.html" with item_set=item_set %}
+                    {# Delete item set modal #}
+                    <form id="delete-form-{{ item_set.id }}"
+                          action="{% url 'delete_item_set' item_set.id %}"
+                          method="post"
+                          class="hidden">
+                      {% csrf_token %}
+                    </form>
+                    {% include "core/dashboard/modals/delete/delete-item-set-modal.html" with item_set=item_set delete_confirm_msg=delete_confirm_msg %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr class="bg-white text-center border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="w-4 p-4" colspan="7">No item sets found.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      {# Include pagination if needed #}
+      {# {% include "core/dashboard/partials/pagination.html" with page_obj=item_sets %} #}
     </div>
-    {# Include pagination if needed #}
-    {# {% include "core/dashboard/partials/pagination.html" with page_obj=item_sets %} #}
-  </div>
-{% endblock admincontent %}
+  {% endblock admincontent %}

@@ -32,6 +32,8 @@ urlpatterns = [
         core_views.booking_success_view,
         name="booking_success",
     ),
+    # NOTE: Booking History
+    path("booking/history/", core_views.booking_history_view, name="booking_history"),
     # --- NOTE: Rental Approval URLs ---
     path(
         "dashboard/rental-approvals/",
@@ -148,6 +150,50 @@ urlpatterns = [
         core_views.delete_accessory,
         name="delete-accessory",
     ),
+    # --- NOTE: Return Processing URLs ---
+    path("dashboard/returns/", core_views.manage_returns, name="manage_returns"),
+    path(
+        "dashboard/returns/process/<int:transaction_pk>/",
+        core_views.process_return,
+        name="process_return",
+    ),
     #
     path("dashboard/manage-products/", core_views.manage_products, name="manage-products"),
+    # Export Section
+    path("dashboard/users/export/", core_views.export_users_excel, name="export_users_excel"),
+    path(
+        "dashboard/employees/export/",
+        core_views.export_employees_excel,
+        name="export_employees_excel",
+    ),
+    path(
+        "dashboard/customers/export/",
+        core_views.export_customers_excel,
+        name="export_customers_excel",
+    ),
+    path(
+        "dashboard/rental-item-types/export/",
+        core_views.export_rental_item_types_excel,
+        name="export_rental_item_types_excel",
+    ),
+    path(
+        "dashboard/rental-items/export/",
+        core_views.export_rental_items_excel,
+        name="export_rental_items_excel",
+    ),
+    path(
+        "dashboard/accessories/export/",
+        core_views.export_accessories_excel,
+        name="export_accessories_excel",
+    ),
+    path(
+        "dashboard/item-sets/export/",
+        core_views.export_item_sets_excel,
+        name="export_item_sets_excel",
+    ),
+    path(
+        "dashboard/rental-transactions/export/",
+        core_views.export_rental_transactions_excel,
+        name="export_rental_transactions_excel",
+    ),
 ]

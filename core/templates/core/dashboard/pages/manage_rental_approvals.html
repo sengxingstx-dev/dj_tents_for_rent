@@ -7,7 +7,8 @@
 {% block admincontent %}
   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <h1 class="text-2xl px-2 py-2 font-semibold text-gray-900 dark:text-white mb-6">{{ title|default:"Rental Approvals" }}</h1>
+      <h1 class="text-2xl px-2 py-2 font-semibold text-gray-900 dark:text-white mb-6">
+      </h1>
       {% if messages %}
         <div class="mb-6">
           {% for message in messages %}
@@ -19,14 +20,14 @@
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" class="px-6 py-3">Rental ID</th>
-              <th scope="col" class="px-6 py-3">Customer</th>
-              <th scope="col" class="px-6 py-3">Dates</th>
-              <th scope="col" class="px-6 py-3">Items/Sets</th>
-              <th scope="col" class="px-6 py-3">Deposit</th>
-              <th scope="col" class="px-6 py-3">Payment Slip</th>
-              <th scope="col" class="px-6 py-3">Action</th>
+            <tr class="lao-table-header">
+              <th scope="col" class="px-6 py-3">#</th>
+              <th scope="col" class="px-6 py-3">ລູກຄ້າ</th>
+              <th scope="col" class="px-6 py-3">ວັນທີ່ເຊົ່າ</th>
+              <th scope="col" class="px-6 py-3">ລາຍການ/ເຊັດ</th>
+              <th scope="col" class="px-6 py-3">ມັດຈຳ</th>
+              <th scope="col" class="px-6 py-3">ສະລິບເງິນໂອນ</th>
+              <th scope="col" class="px-6 py-3">ຈັດການ</th>
             </tr>
           </thead>
           <tbody>
@@ -37,12 +38,12 @@
                   #{{ transaction.id }}
                 </th>
                 <td class="px-6 py-4">
-                  {{ transaction.customer.get_full_name }}
+                  {{ transaction.customer.first_name }} {{ transaction.customer.last_name }}
                   <br>
                   <span class="text-xs">{{ transaction.customer.user.email }}</span>
                 </td>
                 <td class="px-6 py-4">
-                  {{ transaction.start_date|date:"d M Y" }} - {{ transaction.end_date|date:"d M Y" }}
+                  {{ transaction.start_date|date:"d/m/Y" }} - {{ transaction.end_date|date:"d/m/Y" }}
                   <span class="block text-xs">({{ transaction.total_rental_days }} day{{ transaction.total_rental_days|pluralize }})</span>
                 </td>
                 <td class="px-6 py-4 text-xs">

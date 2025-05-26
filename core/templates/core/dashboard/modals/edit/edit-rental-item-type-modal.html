@@ -10,7 +10,7 @@
       {% csrf_token %}
       <!-- Modal header -->
       <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">ແກ້ໄຂ</h3>
         <button type="button"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="editModal-{{ rental_item_type.id }}">
@@ -29,7 +29,7 @@
         <div class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2">
             <label for="type_name"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type name</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຊື່ປະເພດ</label>
             <select id="type_name"
                     name="type_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -41,7 +41,7 @@
           </div>
           <div class="col-span-2">
             <label for="size"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Size</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຂະໜາດ</label>
             <input type="text"
                    name="size"
                    id="size"
@@ -51,7 +51,7 @@
           </div>
           <div class="col-span-2">
             <label for="capacity"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Capacity</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຈຳນວນບັນຈຸ</label>
             <input type="number"
                    name="capacity"
                    id="capacity"
@@ -63,7 +63,7 @@
           </div>
           <div class="col-span-2">
             <label for="rental_price_per_day"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rental Price / Day</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄ່າເຊົ່າ/ມື້</label>
             <input type="number"
                    name="rental_price_per_day"
                    id="rental_price_per_day"
@@ -75,7 +75,7 @@
           </div>
           <div class="col-span-2">
             <label for="replacement_cost"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Replacement Cost</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄ່າປັບໃຫມ</label>
             <input type="number"
                    name="replacement_cost"
                    id="replacement_cost"
@@ -87,7 +87,7 @@
           </div>
           <div class="col-span-2">
             <label for="description"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄຳອະທິບາຍ</label>
             <input type="text"
                    name="description"
                    id="description"
@@ -101,7 +101,7 @@
       <div class="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
         <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Update
+          ແກ້ໄຂ
         </button>
       </div>
     </form>

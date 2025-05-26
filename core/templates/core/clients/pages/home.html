@@ -5,16 +5,23 @@
   Home
 {% endblock title %}
 {% block clientcontent %}
-  {% include "core/clients/partials/carousel.html" %}
+  {% comment %} {% include "core/clients/partials/carousel.html" %} {% endcomment %}
+  <style>
+    .img-popup {
+      backdrop-filter: blur(4px);
+    }
+  </style>
   <div class="container mx-auto py-8 px-4">
     {# --- Display Item Sets --- #}
     {% if item_sets %}
-      <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Rental Sets</h2>
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">ເຊົ່າເປັນຊຸດ</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
         {% for set_item in item_sets %}
           <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
             {# --- Image Section --- #}
-            <a href="#"> {# Link to set detail page if you create one #}
+            <a href="javascript:void(0);"
+               onclick="openImageModal('{% if set_item.image %}{{ set_item.image.url }}{% else %}{% static 'assets/images/img-placeholder.jpg' %}{% endif %}')"
+               class="cursor-pointer">
               {% if set_item.image %}
                 <img class="rounded-t-lg object-cover h-48 w-full"
                      src="{{ set_item.image.url }}"
@@ -23,7 +30,7 @@
                      height="" />
               {% else %}
                 <img class="rounded-t-lg object-cover h-48 w-full"
-                     src="{% static 'images/placeholder.png' %}"
+                     src="{% static 'assets/images/img-placeholder.jpg' %}"
                      alt="Placeholder image"
                      width=""
                      height="" />
@@ -39,9 +46,9 @@
               <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 flex-grow">{{ set_item.description|truncatewords:15 }}</p>
               {# --- Price --- #}
               <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
-                LAK{{ set_item.base_price|floatformat:2|intcomma }} / day (Set Price)
+                LAK{{ set_item.base_price|floatformat:2|intcomma }} / ມື້ (ຕໍ່ຊຸດ)
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Available Sets: {{ set_item.available_quantity }}</p>
+              {% comment %} <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Available Sets: {{ set_item.available_quantity }}</p> {% endcomment %}
               {# --- Add to Booking Button --- #}
               <form action="{% url 'add_to_booking_selection' %}"
                     method="post"
@@ -53,7 +60,7 @@
                 {% if set_item %}
                   <button type="submit"
                           class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                    Add Set to Booking
+                    ເພີ່ມເຊັດ
                     <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                          aria-hidden="true"
                          xmlns="http://www.w3.org/2000/svg"
@@ -76,13 +83,15 @@
       </div>
     {% endif %}
     {# --- Display Individual Items --- #}
-    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Individual Rental Items</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">ເຊົ່າເປັນລາຍການ</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {% for item in rental_items %}
         {# Filter moved to view, template assumes items passed are available #}
         <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
           {# --- Image Section --- #}
-          <a href="#"> {# Link to item detail page if you create one #}
+          <a href="javascript:void(0);"
+             onclick="openImageModal('{% if item.image %}{{ item.image.url }}{% else %}{% static 'assets/images/img-placeholder.jpg' %}{% endif %}')"
+             class="cursor-pointer">
             {% if item.image %}
               <img class="rounded-t-lg object-cover h-48 w-full"
                    src="{{ item.image.url }}"
@@ -91,7 +100,7 @@
                    height="" />
             {% else %}
               <img class="rounded-t-lg object-cover h-48 w-full"
-                   src="{% static 'images/placeholder.png' %}"
+                   src="{% static 'assets/images/img-placeholder.jpg' %}"
                    alt="Placeholder image"
                    width=""
                    height="" />
@@ -112,7 +121,7 @@
             </p>
             {# --- Price --- #}
             <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
-              ${{ item.item_type.rental_price_per_day|floatformat:2|intcomma }} / day
+              LAK{{ item.item_type.rental_price_per_day|floatformat:2|intcomma }} / ມື້
             </p>
             {# --- Add to Booking Button --- #}
             <form action="{% url 'add_to_booking_selection' %}"
@@ -124,7 +133,7 @@
               {# Always add 1 specific item #}
               <button type="submit"
                       class="w-full inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Add Item to Booking
+                ເພີ່ມລາຍການ
                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
                      aria-hidden="true"
                      xmlns="http://www.w3.org/2000/svg"
@@ -143,4 +152,62 @@
       {% endfor %}
     </div>
   </div>
+  {# --- Image Modal --- #}
+  <div id="imageModal"
+       class="img-popup fixed inset-0 z-[100] hidden items-center justify-center bg-black bg-opacity-75 p-4 transition-opacity duration-300 ease-in-out"
+       onclick="closeModalOnClickOutside(event)">
+    <div class="relative max-w-4xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-auto">
+      <img id="modalImage"
+           src=""
+           alt="Full size image"
+           class="block w-full object-contain"
+           width=""
+           height="">
+      <button onclick="closeImageModal()"
+              title="Close (Esc)"
+              class="absolute top-3 right-3 text-gray-300 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 rounded-full p-1.5 focus:outline-none focus:ring-2 focus:ring-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <script>
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+
+    function openImageModal(imageUrl) {
+      if (!imageModal || !modalImage) {
+        console.error('Modal elements not found');
+        return;
+      }
+      modalImage.src = imageUrl;
+      imageModal.classList.remove('hidden');
+      imageModal.classList.add('flex'); // Use flex for centering
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeImageModal() {
+      if (!imageModal) {
+        console.error('Modal element not found');
+        return;
+      }
+      imageModal.classList.add('hidden');
+      imageModal.classList.remove('flex');
+      if (modalImage) modalImage.src = ''; // Clear image
+      document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape" && imageModal && !imageModal.classList.contains('hidden')) {
+        closeImageModal();
+      }
+    });
+
+    function closeModalOnClickOutside(event) {
+      if (event.target === imageModal) { // if click is on the backdrop
+          closeImageModal();
+      }
+    }
+  </script>
 {% endblock clientcontent %}

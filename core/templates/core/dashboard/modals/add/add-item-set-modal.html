@@ -7,7 +7,7 @@
     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
       <!-- Modal header -->
       <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create New Item Set</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">ເພີ່ມເຊັດ</h3>
         <button type="button"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-toggle="addItemSetModal">
@@ -24,12 +24,21 @@
       <!-- Modal body -->
       <form class="p-4 md:p-5"
             action="{% url 'manage-item-sets' %}"
-            method="post">
+            method="post"
+            enctype="multipart/form-data">
         {% csrf_token %}
         <div class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="image">ອັບໂລດຮູບ</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="image"
+                   name="image"
+                   type="file">
+          </div>
+          <div class="col-span-2">
             <label for="item_set_name"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set Name</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຊື່ເຊັດ</label>
             <input type="text"
                    name="name"
                    id="item_set_name"
@@ -39,7 +48,7 @@
           </div>
           <div class="col-span-2 sm:col-span-1">
             <label for="item_set_base_price"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Base Price (€)</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ລາຄາ</label>
             <input type="number"
                    name="base_price"
                    id="item_set_base_price"
@@ -50,7 +59,7 @@
           </div>
           <div class="col-span-2 sm:col-span-1">
             <label for="item_set_replacement_deposit"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Replacement Deposit (€)</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ມັດຈຳ</label>
             <input type="number"
                    name="replacement_deposit"
                    id="item_set_replacement_deposit"
@@ -61,7 +70,7 @@
           </div>
           <div class="col-span-2">
             <label for="item_set_description"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ໝາຍເຫດ</label>
             <textarea id="item_set_description"
                       name="description"
                       rows="3"
@@ -78,7 +87,7 @@
             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd">
             </path>
           </svg>
-          Add Item Set
+          ເພີ່ມ
         </button>
       </form>
     </div>

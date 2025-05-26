@@ -7,9 +7,7 @@
 {% block admincontent %}
   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
     <div class="border-2 border-gray-200 rounded-lg dark:border-gray-700">
-      <h1 class="p-4 text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-        {{ title|default:"Rental Transactions" }}
-      </h1>
+      <h1 class="p-4 text-2xl font-semibold text-gray-900 dark:text-white mb-2"></h1>
       {% if messages %}
         <div class="mb-6 px-4">
           {% for message in messages %}
@@ -18,74 +16,83 @@
           {% endfor %}
         </div>
       {% endif %}
-      {# Filter Form #}
-      <form method="get"
-            action="{% url 'manage_rental_transactions' %}"
-            class="p-4 space-y-4 md:space-y-0 md:flex md:items-end md:space-x-4 bg-gray-50 dark:bg-gray-800 rounded-t-lg border-b dark:border-gray-700">
-        <div>
-          <label for="status_filter"
-                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-          <select id="status_filter"
-                  name="status"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">All Statuses</option>
-            {% for value, display in payment_status_choices %}
-              <option value="{{ value }}"
-                      {% if current_status_filter == value %}selected{% endif %}>{{ display }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div>
-          <label for="customer_filter"
-                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Customer (Name/Email)</label>
-          <input type="text"
-                 id="customer_filter"
-                 name="customer"
-                 value="{{ current_customer_filter|default:'' }}"
-                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                 placeholder="Search customer...">
-        </div>
-        <div>
-          <label for="date_from_filter"
-                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Start Date From</label>
-          <input type="date"
-                 id="date_from_filter"
-                 name="date_from"
-                 value="{{ current_date_from_filter|default:'' }}"
-                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        </div>
-        <div>
-          <label for="date_to_filter"
-                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">End Date To</label>
-          <input type="date"
-                 id="date_to_filter"
-                 name="date_to"
-                 value="{{ current_date_to_filter|default:'' }}"
-                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        </div>
-        <div class="flex items-end space-x-2">
-          <button type="submit"
-                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Filter
-          </button>
-          <a href="{% url 'manage_rental_transactions' %}"
-             class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Reset</a>
-        </div>
-      </form>
+      <div class="ml-2 flex items-center space-x-4">
+        {# Container for search and export #}
+        {# Export Button #}
+        <a href="{% url 'export_rental_transactions_excel' %}"
+          id="export-excel-button" {# Added ID for JS #}
+          class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+          ດາວໂຫຼດ Excel
+        </a>
+        {# Filter Form #}
+        <form method="get"
+              action="{% url 'manage_rental_transactions' %}"
+              class="p-4 space-y-4 md:space-y-0 md:flex md:items-end md:space-x-4 bg-gray-50 dark:bg-gray-800 rounded-t-lg border-b dark:border-gray-700">
+          <div>
+            <label for="status_filter"
+                   class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">ສະຖານະ</label>
+            <select id="status_filter"
+                    name="status"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option value="">All Statuses</option>
+              {% for value, display in payment_status_choices %}
+                <option value="{{ value }}"
+                        {% if current_status_filter == value %}selected{% endif %}>{{ display }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="customer_filter"
+                   class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">ລູກຄ້າ (ຊື່/ອີເມວ)</label>
+            <input type="text"
+                   id="customer_filter"
+                   name="customer"
+                   value="{{ current_customer_filter|default:'' }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="Search customer...">
+          </div>
+          <div>
+            <label for="date_from_filter"
+                   class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">ເລີ່ມວັນທີ່</label>
+            <input type="date"
+                   id="date_from_filter"
+                   name="date_from"
+                   value="{{ current_date_from_filter|default:'' }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="date_to_filter"
+                   class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">ຈົບວັນທີ່</label>
+            <input type="date"
+                   id="date_to_filter"
+                   name="date_to"
+                   value="{{ current_date_to_filter|default:'' }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div class="flex items-end space-x-2">
+            <button type="submit"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+              Filter
+            </button>
+            <a href="{% url 'manage_rental_transactions' %}"
+               class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Reset</a>
+          </div>
+        </form>
+      </div>
       {# Transactions Table #}
       <div class="relative overflow-x-auto shadow-md sm:rounded-b-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" class="px-6 py-3">ID</th>
-              <th scope="col" class="px-6 py-3">Customer</th>
-              <th scope="col" class="px-6 py-3">Dates</th>
-              <th scope="col" class="px-6 py-3">Items/Sets</th>
-              <th scope="col" class="px-6 py-3">Deposit</th>
-              <th scope="col" class="px-6 py-3">Total Cost</th>
-              <th scope="col" class="px-6 py-3">Paid</th>
-              <th scope="col" class="px-6 py-3">Status</th>
-              <th scope="col" class="px-6 py-3">Created</th>
+            <tr class="lao-table-header">
+              <th scope="col" class="px-6 py-3">#</th>
+              <th scope="col" class="px-6 py-3">ລູກຄ້າ</th>
+              <th scope="col" class="px-6 py-3">ວັນທີ່ເຊົ່າ</th>
+              <th scope="col" class="px-6 py-3">ລານການ/ເຊັດ</th>
+              <th scope="col" class="px-6 py-3">ມັດຈຳ</th>
+              <th scope="col" class="px-6 py-3">ລວມທັງໝົດ</th>
+              <th scope="col" class="px-6 py-3">ຈ່າຍແລ້ວ</th>
+              <th scope="col" class="px-6 py-3">ສະຖານະ</th>
+              <th scope="col" class="px-6 py-3">ວັນທີ່ສ້າງ</th>
               {# <th scope="col" class="px-6 py-3">Action</th> #}
             </tr>
           </thead>
@@ -102,12 +109,12 @@
                 </td>
                 <td class="px-6 py-4">
                   {{ transaction.start_date|date:"d/m/Y" }} - {{ transaction.end_date|date:"d/m/Y" }}
-                  <span class="block text-xs">({{ transaction.total_rental_days }} day{{ transaction.total_rental_days|pluralize }})</span>
+                  <span class="block text-xs">({{ transaction.total_rental_days }} ມື້)</span>
                 </td>
                 <td class="px-6 py-4 text-xs">
                   <ul class="list-disc list-inside">
                     {% for set_detail in transaction.rentalsetdetail_set.all %}
-                      <li>{{ set_detail.quantity }} x {{ set_detail.item_set.name }} (Set)</li>
+                      <li>{{ set_detail.quantity }} x {{ set_detail.item_set.name }} (ຊຸດ)</li>
                     {% endfor %}
                     {% for item_detail in transaction.rentalitemdetail_set.all %}
                       {% if not item_detail.set_rental %}
@@ -137,15 +144,15 @@
               <tr>
                 <td colspan="9"
                     class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                  No transactions found matching your filters.
+                  ບໍ່ພົບຂໍ້ມູນ
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-        {# Pagination #}
-        {% include "core/dashboard/partials/pagination.html" with page_obj=transactions %}
       </div>
     </div>
+    {# Pagination #}
+    {% include "core/dashboard/partials/pagination.html" with page_obj=transactions %}
   </div>
 {% endblock admincontent %}

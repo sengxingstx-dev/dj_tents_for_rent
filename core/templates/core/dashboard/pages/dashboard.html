@@ -1,156 +1,310 @@
 {% extends "core/dashboard/base.html" %}
+{% load static %}
+{% load humanize %}
 {% block title %}
   Admin | Dashboard
 {% endblock title %}
 {% block admincontent %}
   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-    <div class="grid grid-cols-3 gap-4 mb-4">
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
+    {% comment %} <h1 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-6">Dashboard Overview</h1> {% endcomment %}
+    {# --- Summary Stats Cards --- #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      {# Pending Approvals Card #}
+      <a href="{% url 'manage_rental_approvals' %}"
+         class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ pending_approvals_count }}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ລໍຖ້າການອະນຸມັດ</p>
+          </div>
+          <div class="text-yellow-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      {# Active Rentals Card #}
+      <a href="{% url 'manage_rental_transactions' %}?status=paid"
+         class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ active_rentals_count }}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ການເຊົ່າທີ່ຊຳເລັດແລ້ວ</p>
+          </div>
+          <div class="text-green-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      {# Total Customers Card #}
+      <a href="{% url 'manage-customers' %}"
+         class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ total_customers_count }}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ລູກຄ້າທັງໝົດ</p>
+          </div>
+          <div class="text-blue-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      {# Total Rental Items Card #}
+      <a href="{% url 'manage-rental-items' %}"
+         class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ total_items_count }}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ລາຍການໃຫ້ເຊົ່າທັງໝົດ</p>
+            {% comment %} <p class="text-sm text-gray-500 dark:text-gray-300">({{ available_items_count }} Available)</p> {% endcomment %}
+          </div>
+          <div class="text-indigo-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      {# Total Item Sets Card #}
+      <a href="{% url 'manage-item-sets' %}"
+         class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ total_sets_count }}</h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ລາຍການຊຸດໃຫ້ເຊົ່າທັງໝົດ</p>
+            {% comment %} <p class="text-sm text-gray-500 dark:text-gray-300">({{ available_sets_count }} Available)</p> {% endcomment %}
+          </div>
+          <div class="text-purple-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      {# Revenue This Month Card (Approximate) #}
+      <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              LAK {{ revenue_this_month_approx|intcomma }}
+            </h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ລາຍຮັບເດືອນນີ້ (ໂດຍປະມານ)</p>
+          </div>
+          <div class="text-teal-500 lao-kip-large">₭</div>
+        </div>
       </div>
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
+      {# Total Deposits Held Card #}
+      <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              LAK {{ total_deposits_held|intcomma }}
+            </h5>
+            <p class="font-normal text-gray-700 dark:text-gray-400">ເງິນຝາກທັງໝົດທີ່ຖືໄວ້</p>
+          </div>
+          <div class="text-cyan-500">
+            <svg class="w-10 h-10"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+              </path>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">
-        <svg class="w-3.5 h-3.5"
-             aria-hidden="true"
-             xmlns="http://www.w3.org/2000/svg"
-             fill="none"
-             viewBox="0 0 18 18">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-        </svg>
-      </p>
-    </div>
-    <div class="grid grid-cols-2 gap-4 mb-4">
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
+    {# --- Quick Links Section --- #}
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Quick Management Links</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{% url 'manage_rental_approvals' %}"
+           class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-50 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-gray-600 p-4 rounded-lg shadow flex items-center space-x-3">
+          <svg class="w-6 h-6"
                fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+               stroke="currentColor"
+               viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+            </path>
           </svg>
-        </p>
+          <span>Manage Rental Approvals</span>
+        </a>
+        <a href="{% url 'manage_rental_transactions' %}"
+           class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 bg-green-50 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-gray-600 p-4 rounded-lg shadow flex items-center space-x-3">
+          <svg class="w-6 h-6"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+            </path>
+          </svg>
+          <span>View All Transactions</span>
+        </a>
+        <a href="{% url 'manage-rental-items' %}"
+           class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-gray-700 hover:bg-indigo-100 dark:hover:bg-gray-600 p-4 rounded-lg shadow flex items-center space-x-3">
+          <svg class="w-6 h-6"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
+            </path>
+          </svg>
+          <span>Manage Rental Items</span>
+        </a>
+        {# Add more links as needed, e.g., Manage Customers, Manage Item Sets, Manage Users #}
       </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
+      {# --- Upcoming Returns & Overdue Rentals --- #}
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {# Upcoming Returns #}
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">ລາຍການສົ່ງຄືນທີ່ຈະມາເຖິງ (7 ມື້)</h2>
+          {% if upcoming_returns %}
+            <ul class="space-y-3">
+              {% for rental in upcoming_returns %}
+                <li class="p-3 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <a href="{% url 'manage_rental_transactions' %}?customer={{ rental.customer.user.email }}"
+                     class="block">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-gray-800 dark:text-gray-100">#{{ rental.id }} - {{ rental.customer.first_name }} {{ rental.customer.last_name }}</span>
+                      <span class="text-sm text-orange-500 dark:text-orange-400">Due: {{ rental.end_date|date:"D, M d" }}</span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ rental.customer.user.email }}</p>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+            {% if upcoming_returns.count >= 5 %}
+              <a href="{% url 'manage_rental_transactions' %}"
+                 class="mt-4 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline">View all active rentals...</a>
+            {% endif %}
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">ບໍ່ພົບຂໍ້ມູນ</p>
+          {% endif %}
+        </div>
+        {# Overdue Rentals #}
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">ການເຊົ່າເກີນກຳນົດ</h2>
+          {% if overdue_rentals %}
+            <ul class="space-y-3">
+              {% for rental in overdue_rentals %}
+                <li class="p-3 bg-red-50 dark:bg-red-900/30 rounded-md hover:bg-red-100 dark:hover:bg-red-800/50">
+                  <a href="{% url 'manage_rental_transactions' %}?customer={{ rental.customer.user.email }}"
+                     class="block">
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-gray-800 dark:text-gray-100">#{{ rental.id }} - {{ rental.customer.get_full_name }}</span>
+                      <span class="text-sm text-red-600 dark:text-red-400">Overdue since: {{ rental.end_date|date:"D, M d" }}</span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ rental.customer.user.email }}</p>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+            {% if overdue_rentals.count >= 5 %}
+              <a href="{% url 'manage_rental_transactions' %}"
+                 class="mt-4 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline">View all transactions...</a>
+            {% endif %}
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">ບໍ່ພົບຂໍ້ມູນ.</p>
+          {% endif %}
+        </div>
       </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-    </div>
-    <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">
-        <svg class="w-3.5 h-3.5"
-             aria-hidden="true"
-             xmlns="http://www.w3.org/2000/svg"
-             fill="none"
-             viewBox="0 0 18 18">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-        </svg>
-      </p>
-    </div>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          <svg class="w-3.5 h-3.5"
-               aria-hidden="true"
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 18 18">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-          </svg>
-        </p>
+      {# --- Recent Bookings --- #}
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">ລາຍການຈອງລ່າສຸດ</h2>
+        {% if recent_bookings %}
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th scope="col"
+                      class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    #
+                  </th>
+                  <th scope="col"
+                      class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    ລູກຄ້າ
+                  </th>
+                  <th scope="col"
+                      class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    ວັນທີ່
+                  </th>
+                  <th scope="col"
+                      class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    ຈຳນວນເງິນທັງໝົດ
+                  </th>
+                  <th scope="col"
+                      class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    ສະຖານະ
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                {% for booking in recent_bookings %}
+                  <tr>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                      <a href="{% url 'manage_rental_transactions' %}?customer={{ booking.customer.user.email }}"
+                         class="hover:underline">#{{ booking.id }}</a>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                      {{ booking.customer.first_name }} {{ booking.customer.last_name }}
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                      {{ booking.start_date|date:"d" }} - {{ booking.end_date|date:"d/m/Y" }}
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                      LAK {{ booking.total_rental_cost|intcomma }}
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if booking.payment_status == 'PAID' %} bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 {% elif booking.payment_status == 'PENDING' %} bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 {% elif booking.payment_status == 'CANCELLED' %} bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 {% else %} bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 {% endif %}">
+                        {{ booking.get_payment_status_display }}
+                      </span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% if recent_bookings.count >= 5 %}
+            <a href="{% url 'manage_rental_transactions' %}"
+               class="mt-4 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline">View all transactions...</a>
+          {% endif %}
+        {% else %}
+          <p class="text-gray-500 dark:text-gray-400">No recent bookings.</p>
+        {% endif %}
       </div>
     </div>
   </div>

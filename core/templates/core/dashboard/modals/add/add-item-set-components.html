@@ -6,10 +6,10 @@
   <div class="container mx-auto px-4 py-8 mt-10">
     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
       <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ title }}</h1>
+        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white"></h1>
         <a href="{% url 'manage-item-sets' %}"
            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Back to Item Sets
+          ກັບຄືນ
         </a>
       </div>
       {% if item_set.description %}
@@ -25,19 +25,19 @@
       {% endif %}
       <!-- Add Component Form -->
       <div class="mb-8 border-b pb-6 dark:border-gray-700">
-        <h2 class="text-xl font-medium text-gray-900 dark:text-white mb-4">Add New Component</h2>
+        {% comment %} <h2 class="text-xl font-medium text-gray-900 dark:text-white mb-4">ເພີ່ມລາຍການ</h2> {% endcomment %}
         <form method="post" action="{% url 'add_components' set_id=item_set.id %}">
           {% csrf_token %}
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             {# Render form fields manually for better layout control #}
             <div class="md:col-span-2">
               <label for="{{ form.item_type.id_for_label }}"
-                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item Type</label>
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ປະເພດລາຍການ</label>
               <select name="{{ form.item_type.name }}"
                       id="{{ form.item_type.id_for_label }}"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required>
-                <option value="" selected disabled>Select Item Type</option>
+                <option value="" selected disabled>ເລືອກປະເພດລາຍການ</option>
                 {% for type in item_types %}<option value="{{ type.pk }}">{{ type }}</option>{% endfor %}
               </select>
               {% if form.item_type.errors %}
@@ -46,7 +46,7 @@
             </div>
             <div>
               <label for="{{ form.quantity.id_for_label }}"
-                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຈຳນວນ</label>
               <input type="number"
                      name="{{ form.quantity.name }}"
                      id="{{ form.quantity.id_for_label }}"
@@ -61,7 +61,7 @@
             <div class="md:col-start-3">
               <button type="submit"
                       class="w-full text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                Add Component
+                ເພີ່ມ
               </button>
             </div>
           </div>
@@ -72,16 +72,16 @@
       </div>
       <!-- Existing Components List -->
       <div>
-        <h2 class="text-xl font-medium text-gray-900 dark:text-white mb-4">Existing Components</h2>
+        <h2 class="text-xl font-medium text-gray-900 dark:text-white mb-4">ລາຍການ</h2>
         {% if components %}
           <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" class="px-6 py-3">Item Type</th>
-                  <th scope="col" class="px-6 py-3">Quantity</th>
+                  <th scope="col" class="px-6 py-3">ປະເພດລາຍການ</th>
+                  <th scope="col" class="px-6 py-3">ຈຳນວນ</th>
                   <th scope="col" class="px-6 py-3">
-                    <span class="sr-only">Actions</span>
+                    <span class="sr-only">ຈັດການ</span>
                   </th>
                 </tr>
               </thead>
@@ -99,7 +99,7 @@
                             class="inline">
                         {% csrf_token %}
                         <button type="submit"
-                                class="font-medium text-red-600 dark:text-red-500 hover:underline">Delete</button>
+                                class="font-medium text-red-600 dark:text-red-500 hover:underline">ລືບລາຍການ</button>
                       </form>
                     </td>
                   </tr>

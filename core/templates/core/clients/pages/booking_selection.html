@@ -1,15 +1,12 @@
 {% extends "core/clients/base.html" %}
 {% load static %}
 {% load humanize %}
-
 {% block title %}
   Booking Selection
 {% endblock title %}
-
 {% block clientcontent %}
   <div class="container mx-auto mt-10 py-12 px-4">
     {% comment %} <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Your Booking Selection</h1> {% endcomment %}
-
     {# Display Messages (Errors, Success, etc.) #}
     {% if messages %}
       <div class="mb-6">
@@ -19,7 +16,6 @@
         {% endfor %}
       </div>
     {% endif %}
-
     {# Handle Empty Selection Case #}
     {% if not items_in_selection and not sets_in_selection %}
       <div class="text-center py-10 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
@@ -30,8 +26,8 @@
              aria-hidden="true">
           <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Your selection is empty</h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Start by adding items or sets to your booking.</p>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">ລາຍການທີ່ທ່ານເລືອກແມ່ນຫວ່າງເປົ່າ</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">ເລີ່ມຕົ້ນໂດຍການເພີ່ມລາຍການ ຫຼື ຊຸດເຂົ້າໃນການຈອງຂອງທ່ານ.</p>
         <div class="mt-6">
           <a href="{% url 'home' %}"
              class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -42,19 +38,17 @@
                  aria-hidden="true">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9V6a1 1 0 112 0v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3z" clip-rule="evenodd" />
             </svg>
-            Browse Items
+            ເລືອກເບິ່ງລາຍການ
           </a>
         </div>
       </div>
     {% else %}
       {# Main Grid Layout #}
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {# Selection Details Column (Left) #}
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-1.5">
           <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-
               {# --- Item Sets Loop --- #}
               {% for set_data in sets_in_selection %}
                 <li class="flex py-6 px-4 sm:px-6">
@@ -75,13 +69,15 @@
                     <div>
                       <div class="flex justify-between">
                         <h4 class="text-lg font-medium text-gray-800 dark:text-white">
-                          <a href="#">{{ set_data.set.name }} (Set)</a>
+                          <a href="#">{{ set_data.set.name }} (ຊຸດ)</a>
                         </h4>
                         <p class="ml-4 text-lg font-medium text-gray-900 dark:text-gray-100">
                           LAK{{ set_data.price_per_day|floatformat:2|intcomma }} {# Price for total quantity per day #}
                         </p>
                       </div>
-                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">LAK{{ set_data.set.base_price|floatformat:2 }} / day (each)</p>
+                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        LAK{{ set_data.set.base_price|floatformat:2 }} / ມື້ (ຕໍ່ຊຸດ)
+                      </p>
                       <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ set_data.set.description|truncatewords:20 }}</p>
                     </div>
                     <div class="mt-4 flex flex-1 items-end justify-between">
@@ -90,219 +86,232 @@
                             method="post"
                             class="flex items-center">
                         {% csrf_token %}
-                        <label for="quantity_set_{{ set_data.set.pk }}" class="sr-only">Quantity</label>
+                        <label for="quantity_set_{{ set_data.set.pk }}" class="sr-only">ຈຳນວນ</label>
                         <input type="number"
-                               name="quantity"
-                               id="quantity_set_{{ set_data.set.pk }}"
-                               value="{{ set_data.quantity }}"
-                               min="1"
-                               max="{{ set_data.set.available_quantity }}" {# Assumes available_quantity property exists #}
-                               class="w-16 rounded-md border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        <button type="submit"
-                                class="ml-2 text-xs text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                          Update
-                        </button>
-                      </form>
-                      {# Remove Button Form #}
-                      <form action="{% url 'remove_from_selection' item_type='set' pk=set_data.set.pk %}"
-                            method="post">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300">
-                          <span>Remove</span>
-                        </button>
-                      </form>
+                          name="quantity"
+                          id="quantity_set_{{ set_data.set.pk }}"
+                          value="{{ set_data.quantity }}"
+                          min="1"
+                          max="100" {# Assumes available_quantity property exists #}
+                          class="w-16 rounded-md border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          <button type="submit"
+                                  class="ml-2 text-xs text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                            ອັບເດດ
+                          </button>
+                        </form>
+                        {# Remove Button Form #}
+                        <form action="{% url 'remove_from_selection' item_type='set' pk=set_data.set.pk %}"
+                              method="post">
+                          {% csrf_token %}
+                          <button type="submit"
+                                  class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300">
+                            <span>ລືບອອກ</span>
+                          </button>
+                        </form>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              {% endfor %}
-
-              {# --- Individual Items Loop --- #}
-              {% for item_data in items_in_selection %}
-                <li class="flex py-6 px-4 sm:px-6">
-                  {% if item_data.item.image %}
-                    <img src="{{ item_data.item.image.url }}"
-                         alt="{{ item_data.item.item_type }}"
-                         width=""
-                         height=""
-                         class="h-24 w-24 flex-shrink-0 rounded-md object-cover object-center sm:h-32 sm:w-32">
-                  {% else %}
-                    <img src="{% static 'images/placeholder.png' %}"
-                         alt="Placeholder"
-                         width=""
-                         height=""
-                         class="h-24 w-24 flex-shrink-0 rounded-md object-cover object-center sm:h-32 sm:w-32">
-                  {% endif %}
-                  <div class="ml-4 flex flex-1 flex-col sm:ml-6">
-                    <div>
-                      <div class="flex justify-between">
-                        <h4 class="text-lg font-medium text-gray-800 dark:text-white">
-                          <a href="#">{{ item_data.item.item_type }}</a>
-                        </h4>
-                        <p class="ml-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-                          LAK{{ item_data.price_per_day|floatformat:2|intcomma }} {# Price for quantity (1) per day #}
-                        </p>
-                      </div>
-                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Serial: {{ item_data.item.serial_number }}</p>
-                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                        {{ item_data.item.item_type.description|truncatewords:20 }}
-                      </p>
-                    </div>
-                    <div class="mt-4 flex flex-1 items-end justify-between">
-                      <p class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                        <span>Qty: {{ item_data.quantity }}</span> {# Quantity is always 1 for specific items in this flow #}
-                      </p>
-                      {# Remove Button Form #}
-                      <form action="{% url 'remove_from_selection' item_type='item' pk=item_data.item.pk %}"
-                            method="post">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300">
-                          <span>Remove</span>
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-
-        {# Summary and Booking Form Column (Right) #}
-        <div class="lg:col-span-1">
-          <div class="sticky top-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Booking Summary & Details</h2>
-
-            {# Price Summary Section #}
-            <div class="border-b border-gray-200 dark:border-gray-600 pb-4 mb-4">
-              <dl class="space-y-2">
-                <div class="flex items-center justify-between">
-                  <dt class="text-sm text-gray-600 dark:text-gray-300">Subtotal (per day)</dt>
-                  <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    LAK{{ total_price_per_day|floatformat:2|intcomma }}
-                  </dd>
-                </div>
-                {# Add other costs like delivery, setup if applicable here #}
-                <div class="flex items-center justify-between">
-                  <dt class="text-sm text-gray-600 dark:text-gray-300">Estimated Deposit</dt>
-                  <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    LAK{{ total_deposit_estimate|floatformat:2|intcomma }}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            {# Booking Form (Dates, Payment, Slip) #}
-            <form method="post"
-                  action="{% url 'finalize_booking' %}"
-                  enctype="multipart/form-data"> {# Essential for file uploads #}
-              {% csrf_token %}
-
-              {# Display Non-Field Errors (e.g., date conflicts) #}
-              {% if form.non_field_errors %}
-                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded dark:bg-red-900 dark:border-red-700 dark:text-red-200">
-                  {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
-                </div>
-              {% endif %}
-
-              {# Flex Container for Form Fields and QR/Upload #}
-              <div class="flex flex-col md:flex-row gap-6">
-
-                {# Form Fields Column (Dates, Payment Method) #}
-                <div class="flex-1 space-y-4">
-                  {# Start Date Field #}
-                  <div>
-                    <label for="{{ form.start_date.id_for_label }}"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                    {{ form.start_date }}
-                    {% if form.start_date.help_text %}
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.start_date.help_text }}</p>
-                    {% endif %}
-                    {% if form.start_date.errors %}
-                      <div class="mt-1 text-sm text-red-600 dark:text-red-400">
-                        {% for error in form.start_date.errors %}<p>{{ error }}</p>{% endfor %}
-                      </div>
-                    {% endif %}
-                  </div>
-
-                  {# End Date Field #}
-                  <div>
-                    <label for="{{ form.end_date.id_for_label }}"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
-                    {{ form.end_date }}
-                    {% if form.end_date.help_text %}
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.end_date.help_text }}</p>
-                    {% endif %}
-                    {% if form.end_date.errors %}
-                      <div class="mt-1 text-sm text-red-600 dark:text-red-400">
-                        {% for error in form.end_date.errors %}<p>{{ error }}</p>{% endfor %}
-                      </div>
-                    {% endif %}
-                  </div>
-
-                  {# Payment Method Field #}
-                  <div>
-                    <label for="{{ form.payment_method.id_for_label }}"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Payment Method (for Deposit)
-                    </label>
-                    {{ form.payment_method }}
-                    {% if form.payment_method.help_text %}
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.payment_method.help_text }}</p>
-                    {% endif %}
-                    {% if form.payment_method.errors %}
-                      <div class="mt-1 text-sm text-red-600 dark:text-red-400">
-                        {% for error in form.payment_method.errors %}<p>{{ error }}</p>{% endfor %}
-                      </div>
-                    {% endif %}
-                  </div>
-                </div>{# End Form Fields Column #}
-
-                {# QR Code / Payment Slip Column #}
-                <div class="flex-1 space-y-4">
-                  {# --- QR Code Section --- #}
-                  <div>
-                    <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-1">Scan to Pay Deposit (GCash)</h3>
-                    <div class="flex justify-center md:justify-start">
-                      <img src="{% static 'images/qr_payment.jpg' %}" {# Make sure this path is correct #}
-                           alt="Payment QR Code"
+                  </li>
+                {% endfor %}
+                {# --- Individual Items Loop --- #}
+                {% for item_data in items_in_selection %}
+                  <li class="flex py-6 px-4 sm:px-6">
+                    {% if item_data.item.image %}
+                      <img src="{{ item_data.item.image.url }}"
+                           alt="{{ item_data.item.item_type }}"
                            width=""
                            height=""
-                           class="border border-gray-300 dark:border-gray-600 rounded max-w-[150px] w-full">
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Use GCash for deposit payment.</p>
-                  </div>
-
-                  {# --- Payment Slip Upload Field --- #}
-                  <div>
-                    <label for="{{ form.payment_slip.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Payment Slip</label>
-                    {{ form.payment_slip }}
-                    {% if form.payment_slip.help_text %}
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.payment_slip.help_text }}</p>
+                           class="h-24 w-24 flex-shrink-0 rounded-md object-cover object-center sm:h-32 sm:w-32">
+                    {% else %}
+                      <img src="{% static 'images/placeholder.png' %}"
+                           alt="Placeholder"
+                           width=""
+                           height=""
+                           class="h-24 w-24 flex-shrink-0 rounded-md object-cover object-center sm:h-32 sm:w-32">
                     {% endif %}
-                    {% if form.payment_slip.errors %}
-                      <div class="mt-1 text-sm text-red-600 dark:text-red-400">
-                        {% for error in form.payment_slip.errors %}<p>{{ error }}</p>{% endfor %}
+                    <div class="ml-4 flex flex-1 flex-col sm:ml-6">
+                      <div>
+                        <div class="flex justify-between">
+                          <h4 class="text-lg font-medium text-gray-800 dark:text-white">
+                            <a href="#">{{ item_data.item.item_type }}</a>
+                          </h4>
+                          <p class="ml-4 text-lg font-medium text-gray-900 dark:text-gray-100">
+                            LAK{{ item_data.price_per_day|floatformat:2|intcomma }} {# Price for quantity (1) per day #}
+                          </p>
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">ລະຫັດເຄື່ອງ: {{ item_data.item.serial_number }}</p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                          {{ item_data.item.item_type.description|truncatewords:20 }}
+                        </p>
                       </div>
-                    {% endif %}
+                      <div class="mt-4 flex flex-1 items-end justify-between">
+                        {# Quantity "Selector" Form for Individual Items (0 to remove, 1 to keep) #}
+                        <form action="{% url 'update_selection_quantity' item_type='item' pk=item_data.item.pk %}"
+                              method="post"
+                              class="flex items-center">
+                          {% csrf_token %}
+                          <label for="quantity_item_{{ item_data.item.pk }}" class="sr-only">ຈຳນວນ (0 ເພື່ອລຶບ, 1 ເພື່ອເກັບໄວ້)</label>
+                          <input type="number"
+                            name="quantity"
+                            id="quantity_item_{{ item_data.item.pk }}"
+                            value="{{ item_data.quantity }}" {# Should be 1 if item is in selection #}
+                            min="0" {# Allow 0 to remove #}
+                            max="100" {# Max for a specific item instance #}
+                            class="w-16 rounded-md border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit"
+                                    class="ml-2 text-xs text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                              ອັບເດດ
+                            </button>
+                          </form>
+                          {# Original display of quantity, can be removed or kept for reference if needed #}
+                          {# <p class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300"><span>Qty: {{ item_data.quantity }}</span></p> #}
+                          {# Remove Button Form #}
+                          <form action="{% url 'remove_from_selection' item_type='item' pk=item_data.item.pk %}"
+                                method="post">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300">
+                              <span>ລືບອອກ</span>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {# Summary and Booking Form Column (Right) #}
+            <div class="lg:col-span-1">
+              <div class="sticky top-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">ສະຫຼຸບການຈອງ ແລະ ລາຍລະອຽດ</h2>
+                {# Price Summary Section #}
+                <div class="border-b border-gray-200 dark:border-gray-600 pb-4 mb-4">
+                  <dl class="space-y-2">
+                    <div class="flex items-center justify-between">
+                      <dt class="text-sm text-gray-600 dark:text-gray-300">ລວມຍອດ (ຕໍ່ມື້)</dt>
+                      <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        LAK{{ total_price_per_day|floatformat:2|intcomma }}
+                      </dd>
+                    </div>
+                    {# Add other costs like delivery, setup if applicable here #}
+                    <div class="flex items-center justify-between">
+                      <dt class="text-sm text-gray-600 dark:text-gray-300">ເງິນມັດຈຳ (30%)</dt>
+                      <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        LAK{{ total_deposit_estimate|floatformat:2|intcomma }}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+                {# Booking Form (Dates, Payment, Slip) #}
+                <form method="post"
+                      action="{% url 'finalize_booking' %}"
+                      enctype="multipart/form-data">
+                  {# Essential for file uploads #}
+                  {% csrf_token %}
+                  {# Display Non-Field Errors (e.g., date conflicts) #}
+                  {% if form.non_field_errors %}
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded dark:bg-red-900 dark:border-red-700 dark:text-red-200">
+                      {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                  {% endif %}
+                  {# Flex Container for Form Fields and QR/Upload #}
+                  <div class="flex flex-col md:flex-row gap-6">
+                    {# Form Fields Column (Dates, Payment Method) #}
+                    <div class="flex-1 space-y-4">
+                      {# Start Date Field #}
+                      <div>
+                        <label for="{{ form.start_date.id_for_label }}"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">ວັນທີ່ເຊົ່າ</label>
+                        {{ form.start_date }}
+                        {% if form.start_date.help_text %}
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.start_date.help_text }}</p>
+                        {% endif %}
+                        {% if form.start_date.errors %}
+                          <div class="mt-1 text-sm text-red-600 dark:text-red-400">
+                            {% for error in form.start_date.errors %}<p>{{ error }}</p>{% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                      {# End Date Field #}
+                      <div>
+                        <label for="{{ form.end_date.id_for_label }}"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">ວັນທີ່ສົ່ງ</label>
+                        {{ form.end_date }}
+                        {% if form.end_date.help_text %}
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.end_date.help_text }}</p>
+                        {% endif %}
+                        {% if form.end_date.errors %}
+                          <div class="mt-1 text-sm text-red-600 dark:text-red-400">
+                            {% for error in form.end_date.errors %}<p>{{ error }}</p>{% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                      {# Payment Method Field #}
+                      <div>
+                        <label for="{{ form.payment_method.id_for_label }}"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          ວິທີການຊຳລະເງິນ (ສຳລັບເງິນມັດຈຳ)
+                        </label>
+                        {{ form.payment_method }}
+                        {% if form.payment_method.help_text %}
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.payment_method.help_text }}</p>
+                        {% endif %}
+                        {% if form.payment_method.errors %}
+                          <div class="mt-1 text-sm text-red-600 dark:text-red-400">
+                            {% for error in form.payment_method.errors %}<p>{{ error }}</p>{% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    {# End Form Fields Column #}
+                    {# QR Code / Payment Slip Column #}
+                    <div class="flex-1 space-y-4">
+                      {# --- QR Code Section --- #}
+                      <div>
+                        <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-1">ສະແກນເພື່ອຊຳລະເງິນມັດຈຳ (BCEL One)</h3>
+                        <div class="flex justify-center md:justify-start">
+                          <img src="{% static 'assets/images/qr_payment.jpg' %}"
+                               alt="Payment QR Code"
+                               width=""
+                               height=""
+                               class="border border-gray-300 dark:border-gray-600 rounded max-w-[150px] w-full">
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">ໃຊ້ BCEL One ສຳລັບການຊຳລະເງິນມັດຈຳ.</p>
+                      </div>
+                      {# --- Payment Slip Upload Field --- #}
+                      <div>
+                        <label for="{{ form.payment_slip.id_for_label }}"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          ອັບໂຫຼດໃບໂອນເງິນ
+                        </label>
+                        {{ form.payment_slip }}
+                        {% if form.payment_slip.help_text %}
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.payment_slip.help_text }}</p>
+                        {% endif %}
+                        {% if form.payment_slip.errors %}
+                          <div class="mt-1 text-sm text-red-600 dark:text-red-400">
+                            {% for error in form.payment_slip.errors %}<p>{{ error }}</p>{% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    {# End QR/Upload Column #}
                   </div>
-                </div>{# End QR/Upload Column #}
-
-              </div>{# End Flex container #}
-
-              {# Submit Button #}
-              <button type="submit"
-                      class="mt-6 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                Confirm & Finalize Booking
-              </button>
-              <p class="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">
-                Availability will be re-checked upon confirmation.
-              </p>
-            </form>
+                  {# End Flex container #}
+                  {# Submit Button #}
+                  <button type="submit"
+                          class="mt-6 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    ຢືນຢັນ ແລະ ສິ້ນສຸດການຈອງ
+                  </button>
+                  <p class="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">ສະຖານະຈະຖືກກວດສອບອີກຄັ້ງເມື່ອຢືນຢັນ.</p>
+                </form>
+              </div>
+            </div>
+            {# End Summary/Form Column #}
           </div>
-        </div>{# End Summary/Form Column #}
-      </div>{# End Grid #}
-    {% endif %} {# End check for empty selection #}
-  </div>{# End Container #}
-{% endblock clientcontent %}
+          {# End Grid #}
+        {% endif %}
+        {# End check for empty selection #}
+      </div>
+      {# End Container #}
+    {% endblock clientcontent %}

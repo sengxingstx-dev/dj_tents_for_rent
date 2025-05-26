@@ -6,12 +6,12 @@
   <div class="relative w-full max-w-md max-h-full">
     <!-- Modal content -->
     {# Action points to the specific item set's update view #}
-    <form method="post" action="{% url 'edit-item-set' item_set.id %}" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+    <form method="post" action="{% url 'edit-item-set' item_set.id %}" class="relative bg-white rounded-lg shadow dark:bg-gray-700" enctype="multipart/form-data">
       {% csrf_token %}
       <!-- Modal header -->
       <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          Edit Item Set: {{ item_set.name }}
+          ແກ້ໄຂເຊັດ: {{ item_set.name }}
         </h3>
         <button type="button"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -36,6 +36,14 @@
 
         {# Item Set Fields - Layout adjusted to match add modal #}
         <div class="grid gap-4 mb-4 grid-cols-2">
+          <div class="col-span-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="image">ອັບໂລດຮູບ</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="image"
+                   name="image"
+                   type="file">
+          </div>
           <div class="col-span-2"> {# Name takes full width #}
             {# Use form variable if available (for validation errors), otherwise use item_set data #}
             <label for="edit_item_set_name_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set Name</label>

@@ -19,11 +19,19 @@
               <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd">
               </path>
             </svg>
-            Add Customer
+            ເພີ່ມລູກຄ້າ
           </button>
           {% comment %} Add employee modal {% endcomment %}
           {% include "core/dashboard/modals/add/add-customer-modal.html" %}
         </div>
+        <div class="flex items-center space-x-4">
+          {# Container for search and export #}
+          {# Export Button #}
+          <a href="{% url 'export_customers_excel' %}"
+            id="export-excel-button" {# Added ID for JS #}
+            class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            ດາວໂຫຼດ Excel
+          </a>
         <form action="" method="get">
           <label for="table-search" class="sr-only">Search</label>
           <div class="pr-2 relative">
@@ -44,15 +52,16 @@
           </div>
         </form>
       </div>
+      </div>
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
+          <tr class="lao-table-header">
             <th scope="col" class="px-6 py-3">No.</th>
-            <th scope="col" class="px-6 py-3">Fullname</th>
-            <th scope="col" class="px-6 py-3">Phone Number</th>
-            <th scope="col" class="px-6 py-3">Address</th>
-            <th scope="col" class="px-6 py-3">Status</th>
-            <th scope="col" class="px-6 py-3">Action</th>
+            <th scope="col" class="px-6 py-3">ຊື່ ແລະ ນາມສະກຸນ</th>
+            <th scope="col" class="px-6 py-3">ເບີໂທ</th>
+            <th scope="col" class="px-6 py-3">ທີ່ຢູ່</th>
+            <th scope="col" class="px-6 py-3">ສະຖຸານະ</th>
+            <th scope="col" class="px-6 py-3">ຈັດການ</th>
           </tr>
         </thead>
         <tbody>
@@ -90,12 +99,12 @@
                      type="button"
                      data-modal-target="editModal-{{ customer.id }}"
                      data-modal-show="editModal-{{ customer.id }}"
-                     class="font-medium text-blue-600 mr-2 dark:text-blue-500 hover:underline">Edit</a>
+                     class="font-medium text-blue-600 mr-2 dark:text-blue-500 hover:underline">ແກ້ໄຂ</a>
                   <a href="#"
                      type="button"
                      data-modal-target="deletePopupModal-{{ customer.id }}"
                      data-modal-show="deletePopupModal-{{ customer.id }}"
-                     class="font-medium text-red-600 dark:text-blue-500 hover:underline">Delete</a>
+                     class="font-medium text-red-600 dark:text-blue-500 hover:underline">ລືບ</a>
                   <!-- Edit customer modal -->
                   {% include "core/dashboard/modals/edit/edit-customer-modal.html" %}
                   <!-- Delete customer modal -->

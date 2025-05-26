@@ -2,9 +2,11 @@
 {% load static %}
 {% block headerscript %}
   <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <script>
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    // if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (localStorage.getItem('color-theme') === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark')
@@ -37,7 +39,8 @@
       }
 
       // Change the icons inside the button based on previous settings
-      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      // if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (localStorage.getItem('color-theme') === 'dark') {
         themeToggleLightIcon.classList.remove('hidden');
         checkbox.checked = true; // Check the checkbox if dark theme is set
       } else {

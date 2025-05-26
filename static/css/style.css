@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'NoToSansLao';
+  src: url('../assets/fonts/NotoSansLao-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  font-family: 'NoToSansLao', sans-serif !important;
+}
+
+.lao-table-header {
+  font-size: medium;
+}
+
+.lao-kip-large {
+  font-size: 50px;
+}

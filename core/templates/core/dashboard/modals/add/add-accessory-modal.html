@@ -7,7 +7,7 @@
     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
       <!-- Modal header -->
       <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create New Accessory</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">ເພີ່ມອຸປະກອນ</h3>
         <button type="button"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-toggle="crud-modal">
@@ -29,11 +29,11 @@
         <div class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2">
             <label for="item_type"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Item type</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ປະເພດລາຍການ</label>
             <select id="item_type"
                     name="item_type"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option selected>Choose rental item type</option>
+              <option selected>ເລືອກປະເພດລາຍການ</option>
               {% for rental_item_type in rental_item_types %}
                 <option value="{{ rental_item_type.id }}">{{ rental_item_type.type_name }}</option>
               {% endfor %}
@@ -41,7 +41,7 @@
           </div>
           <div class="col-span-2">
             <label for="accessory_name"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Accessory name</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຊື່ອຸປະກອນ</label>
             <input type="text"
                    name="accessory_name"
                    id="accessory_name"
@@ -50,7 +50,7 @@
           </div>
           <div class="col-span-2">
             <label for="standard_quantity"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Standard quantity</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຈຳນວນ</label>
             <input type="number"
                    name="standard_quantity"
                    id="standard_quantity"
@@ -62,7 +62,7 @@
           </div>
           <div class="col-span-2">
             <label for="replacement_cost"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Replacement cost</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄ່າປັບໃຫມ</label>
             <input type="number"
                    name="replacement_cost"
                    id="replacement_cost"
@@ -82,7 +82,7 @@
             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd">
             </path>
           </svg>
-          Add new accessory
+          ເພີ່ມ
         </button>
       </form>
     </div>

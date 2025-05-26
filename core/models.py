@@ -21,7 +21,7 @@ class ItemType(models.TextChoices):
     CHAIR = "chair", "Chair"
     FAN = "fan", "Fan"
     TABLECLOTH = "tablecloth", "Tablecloth"
-    other = "other", "Other"
+    OTHER = "other", "Other"
 
 
 class DamageStatus(models.TextChoices):
@@ -49,6 +49,7 @@ class PaymentStatus(models.TextChoices):
     PENDING = "pending", "Pending"
     PAID = "paid", "Paid"
     PARTIAL = "partial", "Partial"
+    COMPLETED = "completed", "Completed"
     CANCELLED = "cancelled", "Cancelled"
     REFUNDED = "refunded", "Refunded"
 

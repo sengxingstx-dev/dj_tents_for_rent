@@ -1,0 +1,82 @@
+{% extends "core/clients/base.html" %}
+{% load humanize %}
+{% block title %}
+  Booking History
+{% endblock title %}
+
+{% block clientcontent %}
+  <div class="container mx-auto py-8 px-4 mt-16">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">ປະຫວັດການເຊົ່າຂອງທ່ານ</h1>
+
+    {% if transactions %}
+      <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr class="lao-table-header">
+              <th scope="col" class="py-3 px-6">
+                #
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ວັນທີ່ເຊົ່າ - ວັນທີ່ສົ່ງ
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ໄລຍະເວລາ
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ຈຳນວນເງິນທັງໝົດ
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ໝັດຈຳ
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ສະຖານະ
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ຈອງວັນທີ່
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ຈັດການ
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ transaction.id }}
+                </th>
+                <td class="py-4 px-6">
+                  {{ transaction.start_date|date:"d/m/Y" }} - {{ transaction.end_date|date:"d/m/Y" }}
+                </td>
+                <td class="py-4 px-6">
+                  {{ transaction.total_rental_days }} ມື້
+                </td>
+                <td class="py-4 px-6">
+                  LAK{{ transaction.total_rental_cost|floatformat:2|intcomma }}
+                </td>
+                 <td class="py-4 px-6">
+                  LAK{{ transaction.total_deposit|floatformat:2|intcomma }}
+                </td>
+                <td class="py-4 px-6">
+                  {{ transaction.get_payment_status_display }}
+                </td>
+                 <td class="py-4 px-6">
+                  {{ transaction.created_at|date:"m/d/Y H:i" }}
+                </td>
+                <td class="py-4 px-6">
+                  {# Add links for viewing details, cancelling (if applicable), etc. #}
+                  {# Example: Link to a detail page if you create one #}
+                  {# <a href="{% url 'booking_detail' pk=transaction.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View Details</a> #}
+                  {# Add cancellation button/form if status is pending/paid #}
+                  <a href="{% url 'booking_success' transaction_pk=transaction.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View Details</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-gray-500 dark:text-gray-300 text-center">You have no past or current rental bookings.</p>
+    {% endif %}
+  </div>
+{% endblock clientcontent %}

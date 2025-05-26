@@ -166,7 +166,7 @@ class AccessoryForm(forms.ModelForm):
 class ItemSetForm(forms.ModelForm):
     class Meta:
         model = ItemSet
-        fields = ["name", "description", "base_price", "replacement_deposit"]
+        fields = ["image", "name", "description", "base_price", "replacement_deposit"]
         widgets = {
             "description": forms.Textarea(attrs={"rows": 3}),
             "base_price": forms.NumberInput(attrs={"step": "0.01"}),
@@ -188,3 +188,76 @@ class ItemSetComponentForm(forms.ModelForm):
         if not item_type:
             raise forms.ValidationError("This field is required.")
         return item_type
+
+
+class ReturnSettlementForm(forms.Form):
+    additional_fine_amount = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=False,
+        initial=0.00,
+        label="ຄ່າປັບໃໝເພີ່ມເຕີມສໍາລັບຄວາມເສຍຫາຍ (ຖ້າມີ)",
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+                "step": "0.01",
+            }
+        ),
+    )
+    fine_description = forms.CharField(
+        required=False,
+        label="ເຫດຜົນສຳຫຼັບການປັບໃໝ",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+                "rows": 2,
+            }
+        ),
+    )
+    final_payment_method = forms.ChoiceField(
+        choices=PaymentMethod.choices,
+        label="ວິທີການຊຳລະ",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            }
+        ),
+    )
+    final_payment_slip = forms.ImageField(
+        required=False,
+        label="ສະລິບການໂອນ",
+        widget=forms.ClearableFileInput(
+            attrs={
+                "class": "form-input mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400",
+                "accept": "image/*",
+            }
+        ),
+    )
+    notes_on_return = forms.CharField(
+        required=False,
+        label="ໝາຍເຫດ",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+                "rows": 3,
+            }
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        additional_fine = cleaned_data.get("additional_fine_amount")
+        fine_description = cleaned_data.get("fine_description")
+        payment_method = cleaned_data.get("final_payment_method")
+        payment_slip = cleaned_data.get("final_payment_slip")
+
+        if additional_fine and additional_fine > 0 and not fine_description:
+            self.add_error("fine_description", "Please provide a reason for the additional fine.")
+
+        if (
+            payment_method == PaymentMethod.BANK_TRANSFER and not payment_slip
+        ):  # Assuming BANK_TRANSFER is a value in PaymentMethod.choices
+            self.add_error(
+                "final_payment_slip", "Payment slip is required for Bank Transfer settlement."
+            )
+        return cleaned_data

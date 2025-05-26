@@ -5,44 +5,20 @@
     <div class="relative h-56 overflow-hidden rounded-md md:h-96">
       <!-- Item 1: https://flowbite.com/docs/images/carousel/carousel-1.svg -->
       <div class="hidden duration-200 ease-in-out" data-carousel-item>
-        <img src="{% static 'core/assets/images/tent1.jpg' %}"
-             class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        <img src="{% static 'core/assets/images/banner.jpg' %}"
+             class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
              width=""
              height=""
-             alt="...">
+             alt="Banner Image">
       </div>
       <!-- Item 2 -->
-      <div class="hidden duration-200 ease-in-out" data-carousel-item>
+      {% comment %} <div class="hidden duration-200 ease-in-out" data-carousel-item>
         <img src="{% static 'core/assets/images/tent2.jpg' %}"
              class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
              width=""
              height=""
              alt="...">
-      </div>
-      <!-- Item 3 -->
-      <div class="hidden duration-200 ease-in-out" data-carousel-item>
-        <img src="{% static 'core/assets/images/tent3.jpg' %}"
-             class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-             width=""
-             height=""
-             alt="...">
-      </div>
-      <!-- Item 4 -->
-      <div class="hidden duration-200 ease-in-out" data-carousel-item>
-        <img src="{% static 'core/assets/images/tent4.jpg' %}"
-             class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-             width=""
-             height=""
-             alt="...">
-      </div>
-      <!-- Item 5 -->
-      <div class="hidden duration-200 ease-in-out" data-carousel-item>
-        <img src="{% static 'core/assets/images/tent5.jpg' %}"
-             class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-             width=""
-             height=""
-             alt="...">
-      </div>
+      </div> {% endcomment %}
     </div>
     <!-- Slider indicators -->
     <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">

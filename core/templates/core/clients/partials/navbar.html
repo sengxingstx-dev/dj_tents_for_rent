@@ -2,14 +2,14 @@
 {% load core_tags %}
 <nav class="bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 fixed w-full z-20 top-0">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="https://flowbite.com/"
+    <a href="#"
        class="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="https://flowbite.com/docs/images/logo.svg"
-           class="h-8"
-           alt="Flowbite Logo"
+      <img src="{% static 'assets/images/logo.png' %}"
+           class="h-12"
+           alt="Logo"
            width=""
            height="" />
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TENTS FOR RENT</span>
+      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">ຮ້ານຄຸນປະດິດ</span>
     </a>
     <div class="flex items-center md:order-2 space-x-3 md:space-x-2 rtl:space-x-reverse">
       <label class="inline-flex items-center cursor-pointer">
@@ -59,11 +59,11 @@
         <div class="items-center justify-between space-x-2 hidden w-full md:flex md:w-auto md:order-1">
           <a href="{% url 'login' %}"
              class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:border-gray-800 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 border">
-            Login
+            ເຂົ້າສູ່ລະບົບ
           </a>
           <a href="{% url 'register' %}"
              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Sign up
+            ສະມັກສະມາຊິກ
           </a>
         </div>
       {% endif %}
@@ -95,9 +95,16 @@
             </a>
           </li> {% endcomment %}
           <li>
-            <a href="#"
+            {# Link to the new Booking History page #}
+            <a href="{% url 'booking_history' %}"
                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-              Sign out
+              ປະຫວັດການເຊົ່າ
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}"
+               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+              ອອກຈາກລະບົບ
             </a>
           </li>
         </ul>
@@ -133,12 +140,12 @@
         <li>
           <a href="{% url 'home' %}"
              class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-             aria-current="page">Home</a>
+             aria-current="page">ໜ້າຫຼັກ</a>
         </li>
         <li>
           <a href="{% url 'about' %}"
              class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-            About
+            ກ່ຽວກັບ
           </a>
         </li>
         {% comment %} <li>
@@ -156,13 +163,13 @@
         <li>
           <a href="{% url 'contact' %}"
              class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-            Contact
+            ຕີດຕໍ່
           </a>
         </li>
         <div class="md:hidden lg:hidden xl:hidden 2xl:hidden md:w-auto md:order-1 mt-2">
           <a href="{% url 'login' %}"
              class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:border-gray-800 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 mr-2 border">
-            Login
+            ເຂົ້າສູ່ລະບົບ
           </a>
           {% comment %} <a href="{% url 'register' %}"
              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">

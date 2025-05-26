@@ -10,7 +10,7 @@
       {% csrf_token %}
       <!-- Modal header -->
       <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">ແກ້ໄຂ</h3>
         <button type="button"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="editModal-{{ customer.id }}">
@@ -29,7 +29,7 @@
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-2">
             <label for="first_name-{{ customer.id }}"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຊື່</label>
             <input type="text"
                    name="first_name"
                    id="first_name-{{ customer.id }}"
@@ -40,7 +40,7 @@
           </div>
           <div class="col-span-2">
             <label for="last_name-{{ customer.id }}"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ນາມສະກຸນ</label>
             <input type="text"
                    name="last_name"
                    id="last_name-{{ customer.id }}"
@@ -51,7 +51,7 @@
           </div>
           <div class="col-span-2">
             <label for="phone_number-{{ customer.id }}"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ເບີໂທ</label>
             <input type="tel"
                    pattern="[0-9]{11}"
                    name="phone_number"
@@ -63,7 +63,7 @@
           </div>
           <div class="col-span-2">
             <label for="address-{{ customer.id }}"
-                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ທີ່ຢູ່</label>
             <input type="text"
                    name="address"
                    id="address-{{ customer.id }}"
@@ -78,7 +78,7 @@
       <div class="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
         <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Update
+          ແກ້ໄຂ
         </button>
       </div>
     </form>
