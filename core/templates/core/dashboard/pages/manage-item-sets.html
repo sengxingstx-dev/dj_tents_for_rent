@@ -78,7 +78,7 @@
                   <th scope="row"
                       class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                     <img class="w-10 h-10 rounded-full"
-                         src="{% if item_set.image %} {{ item_set.image.url }} {% else %} {% static 'accounts/assets/images/default.jpg' %} {% endif %}"
+                         src="{% if item_set.image %} {{ item_set.image.url }} {% else %} {% static 'assets/images/img-placeholder.jpg' %} {% endif %}"
                          width=""
                          height=""
                          alt="rental item image">
@@ -123,13 +123,10 @@
                     {# Edit item set modal #}
                     {% include "core/dashboard/modals/edit/edit-item-set-modal.html" with item_set=item_set %}
                     {# Delete item set modal #}
-                    <form id="delete-form-{{ item_set.id }}"
-                          action="{% url 'delete_item_set' item_set.id %}"
-                          method="post"
-                          class="hidden">
+                    <form action="{% url 'delete_item_set' item_set.id %}" method="post">
                       {% csrf_token %}
+                      {% include "core/dashboard/modals/delete/delete-item-set-modal.html" with item_set=item_set delete_confirm_msg=delete_confirm_msg %}
                     </form>
-                    {% include "core/dashboard/modals/delete/delete-item-set-modal.html" with item_set=item_set delete_confirm_msg=delete_confirm_msg %}
                   </td>
                 </tr>
               {% endfor %}

@@ -53,6 +53,7 @@ def custom_404_view(request, exception):
 
 
 # NOTE: Home
+@login_required
 def home(request):
     rental_items = RentalItem.objects.filter(status=ItemStatus.AVAILABLE).order_by("-updated_at")
     item_sets = ItemSet.objects.all().order_by("name")  # Consider adding availability check later
@@ -1248,7 +1249,7 @@ def manage_item_sets(request):
     context = {
         "item_sets": item_sets,
         "search_query": query,
-        "delete_confirm_msg": "Are you sure you want to delete this item set and all its components?",
+        "delete_confirm_msg": "ທ່ານຕ້ອງການລືບລາຍການນີ້ແທ້ບໍ?",
     }
     return render(request, "core/dashboard/pages/manage-item-sets.html", context)
 
