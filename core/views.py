@@ -340,7 +340,7 @@ def view_booking_selection(request):
                 total_price_per_day += price
                 # Add item replacement cost to deposit estimate (example logic)
                 total_deposit_estimate += (
-                    item.item_type.replacement_cost * quantity * decimal.Decimal("0.3")
+                    item.item_type.rental_price_per_day * quantity * decimal.Decimal("0.3")
                 )  # e.g., 30% of replacement
 
     # Get set details
@@ -360,7 +360,7 @@ def view_booking_selection(request):
                 total_price_per_day += price
                 # Add set deposit to estimate
                 total_deposit_estimate += (
-                    item_set.replacement_deposit * quantity * decimal.Decimal("0.3")
+                    item_set.base_price * quantity * decimal.Decimal("0.3")
                 )  # e.g., 30% of replacement
 
     # Use the existing BookingForm for dates and payment method
@@ -506,7 +506,7 @@ def finalize_booking(request):
                         # Calculate cost and deposit for the set
                         set_price_per_day = item_set.base_price
                         total_rental_cost += set_price_per_day * quantity_needed
-                        total_deposit += item_set.replacement_deposit * quantity_needed
+                        total_deposit += item_set.base_price * quantity_needed
 
                         sets_to_book_details.append(
                             {
@@ -567,7 +567,7 @@ def finalize_booking(request):
                         total_rental_cost += item_price_per_day * quantity_needed
                         # Example deposit logic for individual items (e.g., 30% of replacement)
                         total_deposit += (
-                            item.item_type.replacement_cost
+                            item.item_type.rental_price_per_day
                             * quantity_needed
                             * decimal.Decimal("0.30")
                         )
@@ -721,7 +721,7 @@ def get_selection_context_for_render(request, form):
                 )
                 total_price_per_day += price
                 total_deposit_estimate += (
-                    item.item_type.replacement_cost * quantity * decimal.Decimal("0.3")
+                    item.item_type.rental_price_per_day * quantity * decimal.Decimal("0.3")
                 )
 
     set_ids = [int(pk) for pk in selection["sets"].keys()]
@@ -738,9 +738,7 @@ def get_selection_context_for_render(request, form):
                     {"set": item_set, "quantity": quantity, "price_per_day": price}
                 )
                 total_price_per_day += price
-                total_deposit_estimate += (
-                    item_set.replacement_deposit * quantity * decimal.Decimal("0.3")
-                )
+                total_deposit_estimate += item_set.base_price * quantity * decimal.Decimal("0.3")
 
     return {
         "items_in_selection": items_in_selection,

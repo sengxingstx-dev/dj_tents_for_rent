@@ -46,7 +46,7 @@
           </div>
           <div class="col-span-2"> {# Name takes full width #}
             {# Use form variable if available (for validation errors), otherwise use item_set data #}
-            <label for="edit_item_set_name_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Set Name</label>
+            <label for="edit_item_set_name_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຊື່ເຊັດ</label>
             <input type="text"
                    name="name"
                    {# Use form value if present (e.g., after validation error), otherwise use item_set value #}
@@ -59,7 +59,7 @@
             {% endif %}
           </div>
           <div class="col-span-2 sm:col-span-1"> {# Base Price #}
-            <label for="edit_item_set_base_price_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Base Price (€)</label>
+            <label for="edit_item_set_base_price_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄ່າເຊົ່າ</label>
             <input type="number"
                    step="0.01"
                    name="base_price"
@@ -72,7 +72,7 @@
             {% endif %}
           </div>
            <div class="col-span-2 sm:col-span-1"> {# Replacement Deposit #}
-            <label for="edit_item_set_replacement_deposit_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Replacement Deposit (€)</label>
+            <label for="edit_item_set_replacement_deposit_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄ່າທົດແທນ</label>
             <input type="number"
                    step="0.01"
                    name="replacement_deposit"
@@ -85,7 +85,7 @@
             {% endif %}
           </div>
           <div class="col-span-2"> {# Description takes full width #}
-            <label for="edit_item_set_description_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+            <label for="edit_item_set_description_{{ item_set.id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ຄຳອະທິບາຍ</label>
             <textarea name="description"
                       id="edit_item_set_description_{{ item_set.id }}"
                       rows="3" {# Changed rows to match add modal #}
@@ -101,7 +101,7 @@
       <div class="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
         <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Update Item Set
+          ແກ້ໄຂ
         </button>
       </div>
     </form>
