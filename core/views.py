@@ -1,7 +1,7 @@
 import decimal
 import uuid
 from collections import defaultdict
-from datetime import timedelta
+from datetime import date, timedelta
 
 import openpyxl
 from django.contrib import messages
@@ -1652,6 +1652,71 @@ def booking_history_view(request):
     return render(request, "core/clients/pages/booking_history.html", context)
 
 
+@login_required
+def revenue_report_view(request):
+    """Displays a report of revenue, filterable by month and year."""
+    current_year = timezone.now().year
+    selected_year = request.GET.get("year", str(current_year))
+    selected_month = request.GET.get("month", "")
+
+    payments_query = Payment.objects.select_related("rental__customer__user").order_by(
+        "-transaction_date"
+    )
+
+    # Apply year filter
+    try:
+        year_int = int(selected_year)
+        payments_query = payments_query.filter(transaction_date__year=year_int)
+    except ValueError:
+        messages.error(request, "Invalid year selected.")
+        year_int = current_year  # Fallback to current year
+        payments_query = payments_query.filter(transaction_date__year=year_int)
+
+    # Apply month filter
+    if selected_month:
+        try:
+            month_int = int(selected_month)
+            if 1 <= month_int <= 12:
+                payments_query = payments_query.filter(transaction_date__month=month_int)
+            else:
+                messages.error(request, "Invalid month selected.")
+        except ValueError:
+            messages.error(request, "Invalid month format.")
+
+    total_revenue = payments_query.aggregate(total=Sum("amount"))["total"] or decimal.Decimal(
+        "0.00"
+    )
+
+    # Pagination
+    paginator = Paginator(payments_query, 25)  # Show 25 payments per page
+    page_number = request.GET.get("page")
+    try:
+        payments_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        payments_page = paginator.page(1)
+    except EmptyPage:
+        payments_page = paginator.page(paginator.num_pages)
+
+    # Generate year choices for the filter
+    first_payment_year = (
+        Payment.objects.earliest("transaction_date").transaction_date.year
+        if Payment.objects.exists()
+        else current_year
+    )
+    year_choices = range(first_payment_year, current_year + 1)
+
+    context = {
+        "payments": payments_page,
+        "total_revenue": total_revenue,
+        "selected_year": year_int,
+        "selected_month": selected_month,
+        "year_choices": sorted(list(set(year_choices)), reverse=True),  # Unique years, descending
+        "month_choices": range(1, 13),
+        "title": "Revenue Report",
+    }
+    return render(request, "core/dashboard/pages/revenue_report.html", context)
+
+
 def manage_products(request):
     context = {
         "delete_confirm_msg": "Are you sure you want to delete this product?",
@@ -2147,4 +2212,74 @@ def export_rental_transactions_excel(request):
     # Save the workbook to the response
     workbook.save(response)
 
+    return response
+
+
+@login_required
+def export_revenue_report_excel(request):
+    """Exports the filtered revenue report to an Excel file."""
+    selected_year = request.GET.get("year", str(timezone.now().year))
+    selected_month = request.GET.get("month", "")
+
+    payments_query = Payment.objects.select_related("rental__customer__user").order_by(
+        "-transaction_date"
+    )
+
+    try:
+        year_int = int(selected_year)
+        payments_query = payments_query.filter(transaction_date__year=year_int)
+    except ValueError:  # Fallback if year is invalid
+        payments_query = payments_query.filter(transaction_date__year=timezone.now().year)
+
+    if selected_month:
+        try:
+            month_int = int(selected_month)
+            if 1 <= month_int <= 12:
+                payments_query = payments_query.filter(transaction_date__month=month_int)
+        except ValueError:
+            pass  # Ignore invalid month for export
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "Revenue Report"
+    headers = [
+        "Payment Date",
+        "Rental ID",
+        "Customer",
+        "Amount",
+        "Payment Type",
+        "Payment Method",
+        "Notes",
+    ]
+    sheet.append(headers)
+
+    for payment in payments_query:
+        sheet.append(
+            [
+                payment.transaction_date.strftime("%Y-%m-%d %H:%M"),
+                payment.rental.id if payment.rental else "N/A",
+                (
+                    payment.rental.customer.first_name + " " + payment.rental.customer.last_name
+                    if payment.rental and payment.rental.customer
+                    else "N/A"
+                ),
+                payment.amount,
+                payment.get_payment_type_display(),
+                payment.get_payment_method_display(),
+                payment.notes or "",
+            ]
+        )
+
+    for col_num, header in enumerate(headers, 1):
+        column_letter = get_column_letter(col_num)
+        sheet.column_dimensions[column_letter].auto_size = True
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    filename_month = f"_month-{selected_month}" if selected_month else ""
+    response["Content-Disposition"] = (
+        f"attachment; filename=revenue_report_{selected_year}{filename_month}.xlsx"
+    )
+    workbook.save(response)
     return response

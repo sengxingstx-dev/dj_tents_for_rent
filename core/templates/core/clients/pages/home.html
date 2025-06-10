@@ -48,6 +48,9 @@
               <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                 LAK{{ set_item.base_price|floatformat:2|intcomma }} / ມື້ (ຕໍ່ຊຸດ)
               </p>
+              <p class="mb-4 text-lg font-semibold text-red-800 dark:text-red-100">
+                LAK{{ set_item.replacement_deposit|floatformat:2|intcomma }} ຄ່າປັບໃຫມ (ກໍລະນີເຄື່ອງເປ່ເພ ຫຼື ເສຍຫາຍ)
+              </p>
               {% comment %} <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Available Sets: {{ set_item.available_quantity }}</p> {% endcomment %}
               {# --- Add to Booking Button --- #}
               <form action="{% url 'add_to_booking_selection' %}"
@@ -122,6 +125,9 @@
             {# --- Price --- #}
             <p class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
               LAK{{ item.item_type.rental_price_per_day|floatformat:2|intcomma }} / ມື້
+            </p>
+            <p class="mb-4 text-lg font-semibold text-red-800 dark:text-red-100">
+              LAK{{ item.item_type.replacement_cost|floatformat:2|intcomma }} ຄ່າປັບໃຫມ (ກໍລະນີເຄື່ອງເປ່ເພ ຫຼື ເສຍຫາຍ)
             </p>
             {# --- Add to Booking Button --- #}
             <form action="{% url 'add_to_booking_selection' %}"

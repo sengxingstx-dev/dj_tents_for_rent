@@ -169,6 +169,17 @@
           <span class="flex-1 ms-3 whitespace-nowrap">ທຸລະກຳທັງໝົດ</span>
         </a>
       </li>
+      <li>
+        <a href="{% url 'revenue_report' %}"
+           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {% if request.resolver_match.url_name == 'revenue_report' %}bg-gray-100 dark:bg-gray-700{% endif %}">
+          <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M11.074 4 8.442.359A.999.999 0 0 0 7.078 0H4.201a.998.998 0 0 0-.992.992V2H0V4h3.002v10h11.996V4h3V2h-1.171A.993.993 0 0 0 15.543 0h-2.855a.999.999 0 0 0-.791.359L11.074 4ZM5.002 2h1.021L9 5.979 11.979 2h1.021V4h-1.021L9 7.979 6.021 4H5.002V2Zm10.996 10H4.002V6h11.996v6Z"/>
+            <path d="M13.002 16h-1.996V9h1.996v7Z"/>
+            <path d="M9.002 16H7.006V9h1.996v7Z"/>
+          </svg>
+          <span class="flex-1 ms-3 whitespace-nowrap">ລາຍງານລາຍຮັບ</span>
+        </a>
+      </li>
       {% comment %} <li>
         <a href="{% url 'manage-products' %}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">

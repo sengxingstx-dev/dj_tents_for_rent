@@ -196,4 +196,15 @@ urlpatterns = [
         core_views.export_rental_transactions_excel,
         name="export_rental_transactions_excel",
     ),
+    # --- Revenue Report URLs ---
+    path(
+        "dashboard/reports/revenue/",
+        core_views.revenue_report_view,
+        name="revenue_report",
+    ),
+    path(
+        "dashboard/reports/revenue/export/",
+        core_views.export_revenue_report_excel,
+        name="export_revenue_report_excel",
+    ),
 ]
