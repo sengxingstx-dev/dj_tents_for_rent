@@ -44,7 +44,7 @@
                 </td>
                 <td class="px-6 py-4">
                   {{ transaction.start_date|date:"d/m/Y" }} - {{ transaction.end_date|date:"d/m/Y" }}
-                  <span class="block text-xs">({{ transaction.total_rental_days }} day{{ transaction.total_rental_days|pluralize }})</span>
+                  <span class="block text-xs">({{ transaction.total_rental_days }} ມື້)</span>
                 </td>
                 <td class="px-6 py-4 text-xs">
                   <ul class="list-disc list-inside">
@@ -71,7 +71,7 @@
                              height=""
                              alt="Payment Slip for {{ transaction.id }}"
                              class="h-10 w-auto rounded border dark:border-gray-600 hover:scale-150 transition-transform">
-                        View Slip
+                        ເຊັກເບິ່ງ
                       </a>
                     {% else %}
                       <span class="text-gray-400 italic">No Slip</span>
@@ -83,7 +83,7 @@
                     {% csrf_token %}
                     <button type="submit"
                             class="font-medium text-green-600 dark:text-green-500 hover:underline px-2 py-1 rounded bg-green-100 dark:bg-green-900 dark:hover:bg-green-800">
-                      Approve
+                      ຢືນຢັນ
                     </button>
                   </form>
                   {# Add a "Reject" button/form #}
@@ -93,7 +93,7 @@
                             class="font-medium text-red-600 dark:text-red-500 hover:underline px-2 py-1 rounded bg-red-100 dark:bg-red-900 dark:hover:bg-red-800"
                             onclick="return confirm('Are you sure you want to reject this rental? This action cannot be undone.');">
                       {# Optional confirmation #}
-                      Reject
+                      ປະຕິເສດ
                     </button>
                   </form>
                 </td>

@@ -64,6 +64,18 @@ class BookingForm(forms.Form):
         help_text="Optional: Upload proof of payment (e.g., GCash screenshot).",
     )
 
+    event_location_notes = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "class": "form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+                "placeholder": "e.g., ບ້ານ ໂພນໄຊ, ໃກ້ວັດ, ຕິດຕໍ່ ທ້າວ... ເບີ 020...",
+            }
+        ),
+        required=True,  # Make it optional or True
+        help_text="ກະລຸນາລະບຸທີ່ຢູ່ ຫຼື ລາຍລະອຽດສະຖານທີ່ຈັດງານ.",
+    )
+
     def clean_start_date(self):
         start_date = self.cleaned_data.get("start_date")
         if start_date and start_date < timezone.now().date():

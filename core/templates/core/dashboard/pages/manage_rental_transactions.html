@@ -90,9 +90,9 @@
               <th scope="col" class="px-6 py-3">ລານການ/ເຊັດ</th>
               <th scope="col" class="px-6 py-3">ມັດຈຳ</th>
               <th scope="col" class="px-6 py-3">ລວມທັງໝົດ</th>
-              <th scope="col" class="px-6 py-3">ຈ່າຍແລ້ວ</th>
+              {% comment %} <th scope="col" class="px-6 py-3">ຈ່າຍແລ້ວ</th> {% endcomment %}
+              <th scope="col" class="px-6 py-3">ທີ່ຢູ່</th>
               <th scope="col" class="px-6 py-3">ສະຖານະ</th>
-              <th scope="col" class="px-6 py-3">ວັນທີ່ສ້າງ</th>
               {# <th scope="col" class="px-6 py-3">Action</th> #}
             </tr>
           </thead>
@@ -125,16 +125,18 @@
                 </td>
                 <td class="px-6 py-4">LAK{{ transaction.total_deposit|floatformat:2|intcomma }}</td>
                 <td class="px-6 py-4">LAK{{ transaction.total_rental_cost|floatformat:2|intcomma }}</td>
-                <td class="px-6 py-4">LAK{{ transaction.amount_paid|floatformat:2|intcomma }}</td>
+                {% comment %} <td class="px-6 py-4">LAK{{ transaction.amount_paid|floatformat:2|intcomma }}</td> {% endcomment %}
+                <td class="px-6 py-4 text-xs">
+                  {% if transaction.event_location_notes %}
+                    {{ transaction.event_location_notes }}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
                 <td class="px-6 py-4">
                   <span class="px-2 py-1 text-xs font-medium rounded-full {% if transaction.payment_status == PaymentStatus.PAID %} bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 {% elif transaction.payment_status == PaymentStatus.PENDING %} bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 {% elif transaction.payment_status == PaymentStatus.PARTIAL %} bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 {% elif transaction.payment_status == PaymentStatus.CANCELLED %} bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 {% elif transaction.payment_status == PaymentStatus.REFUNDED %} bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 {% else %} bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 {% endif %}">
                     {{ transaction.get_payment_status_display }}
                   </span>
-                </td>
-                <td class="px-6 py-4 text-xs">
-                  {{ transaction.created_at|date:"d/m/Y" }}
-                  <br>
-                  {{ transaction.created_at|time:"H:i" }}
                 </td>
                 {% comment %} <td class="px-6 py-4">
                   <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View Details</a>

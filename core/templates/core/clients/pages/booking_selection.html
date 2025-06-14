@@ -262,6 +262,22 @@
                           </div>
                         {% endif %}
                       </div>
+                      {# Event Location Notes Field #}
+                      <div>
+                        <label for="{{ form.event_location_notes.id_for_label }}"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          ທີ່ຢູ່/ລາຍລະອຽດສະຖານທີ່
+                        </label>
+                        {{ form.event_location_notes }}
+                        {% if form.event_location_notes.help_text %}
+                          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ form.event_location_notes.help_text }}</p>
+                        {% endif %}
+                        {% if form.event_location_notes.errors %}
+                          <div class="mt-1 text-sm text-red-600 dark:text-red-400">
+                            {% for error in form.event_location_notes.errors %}<p>{{ error }}</p>{% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
                     </div>
                     {# End Form Fields Column #}
                     {# QR Code / Payment Slip Column #}

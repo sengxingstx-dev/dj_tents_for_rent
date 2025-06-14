@@ -82,7 +82,15 @@
                 </th>
                 <td class="px-6 py-4">{{ rental_item.item_type }}</td>
                 <td class="px-6 py-4">{{ rental_item.serial_number }}</td>
-                <td class="px-6 py-4">{{ rental_item.status }}</td>
+                <td class="px-6 py-4">
+                  {% if rental_item.status == 'available' %}
+                    ຫວ່າງ
+                  {% elif rental_item.status == 'under_maintenance' %}
+                    ບຳລຸງຮັກສາ
+                  {% else %}
+                    ຫມົດອາຍຸໃຊ້ງານ
+                  {% endif %}
+                </td>
                 <td class="px-6 py-4">{{ rental_item.purchase_date|date:"d/m/Y" }}</td>
                 <td class="px-6 py-4">{{ rental_item.last_inspection_date|date:"d/m/Y" }}</td>
                 <td class="px-6 py-4">

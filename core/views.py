@@ -465,6 +465,7 @@ def finalize_booking(request):
         end_date = form.cleaned_data["end_date"]
         payment_method = form.cleaned_data["payment_method"]
         payment_slip_file = form.cleaned_data.get("payment_slip")  # Use .get() as it might be None
+        event_location_notes = form.cleaned_data.get("event_location_notes", "")
 
         # --- Data Validation & Calculation ---
         duration_days = max(1, (end_date - start_date).days + 1)
@@ -597,6 +598,7 @@ def finalize_booking(request):
                     start_date=start_date,
                     end_date=end_date,
                     total_deposit=final_total_deposit,
+                    event_location_notes=event_location_notes,
                     payment_status=PaymentStatus.PENDING,
                 )
 

@@ -10,18 +10,18 @@ from core.utils import item_set_storage, payment_slip_storage, rental_item_stora
 
 
 class ItemStatus(models.TextChoices):
-    AVAILABLE = "available", "Available"
-    UNDER_MAINTENANCE = "under_maintenance", "Under Maintenance"
-    RETIRED = "retired", "Retired"
+    AVAILABLE = "available", "ຫວ່າງ"
+    UNDER_MAINTENANCE = "under_maintenance", "ບຳລຸງຮັກສາ"
+    RETIRED = "retired", "ຫມົດອາຍຸໃຊ້ງານ"
 
 
 class ItemType(models.TextChoices):
-    TENT = "tent", "Tent"
-    TABLE = "table", "Table"
-    CHAIR = "chair", "Chair"
-    FAN = "fan", "Fan"
-    TABLECLOTH = "tablecloth", "Tablecloth"
-    OTHER = "other", "Other"
+    TENT = "tent", "ເຕັ່ນ"
+    TABLE = "table", "ໂຕະ"
+    CHAIR = "chair", "ຕັ່ງ"
+    FAN = "fan", "ພັດລົມ"
+    TABLECLOTH = "tablecloth", "ຜ້າປູໂຕະ"
+    OTHER = "other", "ອື່ນໆ"
 
 
 class DamageStatus(models.TextChoices):
@@ -187,6 +187,9 @@ class RentalTransaction(BaseModel):
     total_fines = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     payment_status = models.CharField(
         max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING
+    )
+    event_location_notes = models.TextField(
+        blank=True, null=True, help_text="Address or notes about the event location."
     )
 
     class Meta:
